@@ -14,14 +14,6 @@
 
 A comprehensive cybersecurity toolkit designed for Kali Linux.
 
-## ⚠️ Educational Use Only
-
-This tool is designed for:
-- Authorized penetration testing
-- Cybersecurity education and research
-- CTF competitions and practice
-- Personal lab environments
-
 ## 🚀 Features
 
 ### Kill Chain Categories
