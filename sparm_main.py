@@ -19,48 +19,56 @@ class SPARMInterface:
     def show_disclaimer(self):
         """Display educational disclaimer"""
         clear()
-        console.print(Panel(DISCLAIMER, title="⚠️  IMPORTANT DISCLAIMER ⚠️", style="bold red"))
-        console.print("\n[bold green]Proceeding to SPARM interface...[/bold green]")
+        console.print("[bold red]" + "─" * 60 + "[/bold red]")
+        console.print("[bold red]⚠️  EDUCATIONAL USE ONLY - AUTHORIZED TESTING REQUIRED ⚠️[/bold red]")
+        console.print("[bold red]" + "─" * 60 + "[/bold red]")
+        console.print(DISCLAIMER)
+        console.print("[bold red]" + "─" * 60 + "[/bold red]")
+        console.print("\n[bold green]✓[/bold green] Initializing SPARM interface...")
         import time
-        time.sleep(2)
+        time.sleep(1.5)
     
     def initialize_user_profile(self):
-        """Initialize user profile with intermediate settings"""
+        """Initialize user profile with experience level selection"""
         self.user_level = "intermediate"  # Default to intermediate level
         clear()
-        console.print("[bold cyan]SPARM initialized with guided assistance mode[/bold cyan]\n")
+        console.print("[bold green]✓[/bold green] SPARM initialized successfully")
+        console.print("[dim]Ready for security testing operations[/dim]\n")
     
     def display_main_menu(self):
-        """Display the main menu interface"""
+        """Display the compact main menu interface"""
         clear()
         ascii_art("SPARM")
         
-        console.print(f"[bold cyan]Experience Level:[/bold cyan] {EXPERIENCE_LEVELS[self.user_level]['name']}")
-        console.print(f"[bold green]Status:[/bold green] Ready for security testing\n")
+        compact_menu_header()
+        status_line(self.user_level, "Ready for security testing")
+        separator()
         
-        # Kill chain phases
-        console.print("[bold yellow]🎯 Cyber Kill Chain Phases[/bold yellow]\n")
+        console.print("[bold yellow]🎯 Cyber Kill Chain Phases[/bold yellow]")
+        separator()
         
         menu_items = [
-            ("1", "🔍 OSINT & Information Gathering", "osint", "Reconnaissance phase - Gather intelligence about targets"),
-            ("2", "🌐 Network Reconnaissance", "recon", "Discovery phase - Map network topology and services"),
-            ("3", "🛡️  Web Vulnerability Assessment", "web_vuln", "Exploitation phase - Test web applications for vulnerabilities"),
-            ("4", "💉 SQL Injection Testing", "sql_injection", "Exploitation phase - Database injection attacks"),
-            ("5", "🔑 Credential Access", "credential_access", "Credential access - Password attacks and harvesting"),
-            ("6", "⬆️  Privilege Escalation", "privilege_escalation", "Post-exploitation - Escalate system privileges"),
-            ("7", "🚀 Advanced Offensive Tools", "advanced_offensive", "Advanced payloads, C2, persistence, and evasion"),
-            ("8", "ℹ️  Tool Information", "info", "Learn about cybersecurity tools and techniques"),
-            ("9", "⚙️  Settings", "settings", "Configure SPARM settings"),
-            ("0", "🚪 Exit", "exit", "Exit SPARM")
+            ("1", "🔍", "OSINT & Information Gathering", "Reconnaissance phase", "cyan"),
+            ("2", "🌐", "Network Reconnaissance", "Discovery & enumeration", "blue"),
+            ("3", "🛡️", "Web Vulnerability Assessment", "Web application testing", "magenta"),
+            ("4", "💉", "SQL Injection Testing", "Database injection attacks", "red"),
+            ("5", "🔑", "Credential Access", "Password attacks & harvesting", "yellow"),
+            ("6", "⬆️", "Privilege Escalation", "System privilege escalation", "green"),
+            ("7", "🚀", "Advanced Offensive Tools", "Payloads, C2 & persistence", "red"),
+            ("8", "🔒", "Privacy Protection", "VPN, Tor & lab security", "magenta"),
+            ("9", "📚", "Documentation Server", "Host SPARM documentation", "blue"),
+            ("10", "ℹ️", "Tool Information", "Learn tools & techniques", "white"),
+            ("11", "⚙️", "Settings", "Configure SPARM settings", "cyan"),
+            ("0", "🚪", "Exit", "Exit SPARM safely", "dim")
         ]
         
-        for choice, name, category, description in menu_items:
-            console.print(f"[bold cyan]▸[/bold cyan] {name}")
-            console.print(f"  [dim cyan]{description}[/dim cyan]")
-            console.print(f"  [bold white]Select: {choice}[/bold white]\n")
+        for i, (choice, icon, name, description, color) in enumerate(menu_items):
+            if i % 2 == 0 and i > 0:
+                console.print()
+            display_compact_menu_item(int(choice) if choice != "0" else 0, icon, name, description, color)
         
-        console.print()
-        return get_user_input("Select an option", choices=[item[0] for item in menu_items])
+        separator()
+        return get_user_input("[bold cyan]SPARM[/bold cyan] > Select option", choices=[item[0] for item in menu_items])
     
     def route_selection(self, choice):
         """Route user selection to appropriate module"""
@@ -85,8 +93,13 @@ class SPARMInterface:
             from modules.advanced_offensive import run as advanced_run
             advanced_run()
         elif choice == "8":
-            self.show_tool_information()
+            from modules.privacy_protection import run as privacy_run
+            privacy_run()
         elif choice == "9":
+            self.documentation_server()
+        elif choice == "10":
+            self.show_tool_information()
+        elif choice == "11":
             self.settings_menu()
         elif choice == "0":
             self.exit_application()
@@ -94,19 +107,22 @@ class SPARMInterface:
     def privilege_escalation_menu(self):
         """Privilege escalation tools and techniques"""
         clear()
-        Title("Privilege Escalation Toolkit")
+        console.print("[bold green]⬆️  Privilege Escalation Toolkit[/bold green]")
+        separator()
         
-        console.print(DISCLAIMER)
-        Continue()
+        tools = [
+            ("1", "🐧", "LinPEAS", "Linux privilege escalation scanner", "green"),
+            ("2", "🪟", "WinPEAS", "Windows privilege escalation scanner", "blue"),
+            ("3", "🔍", "Linux Exploit Suggester", "Kernel exploit suggestions", "yellow"),
+            ("4", "📚", "GTFOBins Lookup", "Unix binary exploitation guide", "cyan"),
+            ("5", "🔙", "Back to Main Menu", "Return to main interface", "dim")
+        ]
         
-        console.print("\n[bold cyan]Privilege Escalation Tools:[/bold cyan]")
-        console.print("  1. LinPEAS - Linux privilege escalation scanner")
-        console.print("  2. WinPEAS - Windows privilege escalation scanner") 
-        console.print("  3. Linux Exploit Suggester")
-        console.print("  4. GTFOBins lookup")
-        console.print("  5. Back to main menu")
+        for choice, icon, name, description, color in tools:
+            display_compact_menu_item(int(choice), icon, name, description, color)
         
-        choice = get_user_input("Select tool (1-5)", choices=["1", "2", "3", "4", "5"])
+        separator()
+        choice = get_user_input("[bold green]PRIVESC[/bold green] > Select tool", choices=["1", "2", "3", "4", "5"])
         
         if choice == "1":
             self.run_linpeas()
@@ -188,17 +204,24 @@ class SPARMInterface:
     def settings_menu(self):
         """Settings and configuration menu"""
         clear()
-        Title("SPARM Settings")
+        console.print("[bold cyan]⚙️  SPARM Configuration[/bold cyan]")
+        separator()
         
-        console.print(f"Current experience level: {EXPERIENCE_LEVELS[self.user_level]['name']}\n")
+        console.print(f"[bold white]Current Level:[/bold white] {EXPERIENCE_LEVELS[self.user_level]['name']}")
+        separator()
         
-        console.print("Settings options:")
-        console.print("  1. Change experience level")
-        console.print("  2. View tool paths")
-        console.print("  3. View wordlist locations")
-        console.print("  4. Back to main menu")
+        settings = [
+            ("1", "🎓", "Change Experience Level", "Adjust guidance and automation", "yellow"),
+            ("2", "🛠️", "View Tool Paths", "Check installed tool locations", "green"),
+            ("3", "📝", "View Wordlist Locations", "Show available wordlists", "blue"),
+            ("4", "🔙", "Back to Main Menu", "Return to main interface", "dim")
+        ]
         
-        choice = get_user_input("Select option (1-4)", choices=["1", "2", "3", "4"])
+        for choice, icon, name, description, color in settings:
+            display_compact_menu_item(int(choice), icon, name, description, color)
+        
+        separator()
+        choice = get_user_input("[bold cyan]SETTINGS[/bold cyan] > Select option", choices=["1", "2", "3", "4"])
         
         if choice == "1":
             self.select_experience_level()
@@ -233,12 +256,181 @@ class SPARMInterface:
         
         Continue()
     
+    def select_experience_level(self):
+        """Allow user to select experience level"""
+        clear()
+        console.print("[bold yellow]🎓 Select Experience Level[/bold yellow]")
+        separator()
+        
+        levels = [
+            ("1", "🎓", "Beginner", "Guided mode with explanations", "green"),
+            ("2", "⚡", "Intermediate", "Balanced mode with some automation", "yellow"),
+            ("3", "🔥", "Advanced", "Expert mode with minimal guidance", "red"),
+            ("4", "🔙", "Back", "Return to settings menu", "dim")
+        ]
+        
+        for choice, icon, name, description, color in levels:
+            display_compact_menu_item(int(choice), icon, name, description, color)
+        
+        separator()
+        choice = get_user_input("[bold yellow]LEVEL[/bold yellow] > Select experience level", choices=["1", "2", "3", "4"])
+        
+        if choice == "1":
+            self.user_level = "beginner"
+            Success("Experience level set to Beginner")
+        elif choice == "2":
+            self.user_level = "intermediate"
+            Success("Experience level set to Intermediate")
+        elif choice == "3":
+            self.user_level = "advanced"
+            Success("Experience level set to Advanced")
+        elif choice == "4":
+            return
+        
+        Continue()
+    
+    def documentation_server(self):
+        """Start documentation server with localxpose option"""
+        clear()
+        console.print("[bold blue]📚 SPARM Documentation Server[/bold blue]")
+        separator()
+        
+        console.print("Host your SPARM documentation locally or publicly")
+        separator()
+        
+        options = [
+            ("1", "🌐", "Start Local Server", "Host docs at http://localhost:8080", "green"),
+            ("2", "🚀", "Setup Public Access", "Configure localxpose for public hosting", "yellow"),
+            ("3", "📖", "Open Documentation", "View docs in browser", "blue"),
+            ("4", "ℹ️", "Server Information", "View hosting details and URLs", "white"),
+            ("5", "🔙", "Back to Main Menu", "Return to SPARM main menu", "dim")
+        ]
+        
+        for choice, icon, name, description, color in options:
+            display_compact_menu_item(int(choice), icon, name, description, color)
+        
+        separator()
+        choice = get_user_input("[bold blue]DOCS[/bold blue] > Select option", choices=["1", "2", "3", "4", "5"])
+        
+        if choice == "1":
+            self.start_local_server()
+        elif choice == "2":
+            self.setup_public_access()
+        elif choice == "3":
+            self.open_documentation()
+        elif choice == "4":
+            self.show_server_info()
+        elif choice == "5":
+            return
+            
+        Continue()
+    
+    def start_local_server(self):
+        """Start local documentation server"""
+        console.print("[bold green]🌐 Starting Local Documentation Server[/bold green]")
+        separator()
+        
+        console.print("Starting server on http://localhost:8080...")
+        console.print("\n[bold yellow]To start server:[/bold yellow]")
+        console.print("python3 serve_docs.py")
+        
+        console.print("\n[bold cyan]Server will be accessible at:[/bold cyan]")
+        console.print("• Local: http://localhost:8080/sparm_documentation.html")
+        console.print("• Network: http://0.0.0.0:8080/sparm_documentation.html")
+        
+        if Confirm.ask("\nStart server now?"):
+            import subprocess
+            import threading
+            
+            def run_server():
+                subprocess.run(['python3', 'serve_docs.py'])
+            
+            thread = threading.Thread(target=run_server, daemon=True)
+            thread.start()
+            
+            Success("Documentation server started in background!")
+            console.print("Press Ctrl+C in the terminal to stop the server")
+    
+    def setup_public_access(self):
+        """Setup public access with localxpose"""
+        console.print("[bold yellow]🚀 Public Access Setup[/bold yellow]")
+        separator()
+        
+        console.print("Setting up public access using localxpose...")
+        console.print("\n[bold cyan]Steps to enable public access:[/bold cyan]")
+        console.print("1. Run the setup script: ./setup_public_docs.sh")
+        console.print("2. Start combined server: ./start_public_docs.sh")
+        
+        console.print("\n[bold cyan]Your localxpose token:[/bold cyan]")
+        console.print("EuuH7kG0tZTCgB3rioKeR5a24e1iWc6oFEaolvca")
+        
+        console.print("\n[bold green]Manual setup commands:[/bold green]")
+        console.print("loclx account login --token EuuH7kG0tZTCgB3rioKeR5a24e1iWc6oFEaolvca")
+        console.print("loclx tunnel http --to localhost:8080")
+        
+        if Confirm.ask("\nRun setup script now?"):
+            import subprocess
+            subprocess.run(['./setup_public_docs.sh'])
+    
+    def open_documentation(self):
+        """Open documentation in browser"""
+        console.print("[bold blue]📖 Opening Documentation[/bold blue]")
+        separator()
+        
+        import webbrowser
+        import os
+        
+        doc_path = os.path.join(os.getcwd(), "docs", "sparm_documentation.html")
+        
+        if os.path.exists(doc_path):
+            try:
+                webbrowser.open(f'file://{doc_path}')
+                Success("Documentation opened in browser!")
+            except Exception as e:
+                Warning(f"Could not open browser: {e}")
+                console.print(f"[bold cyan]Manual path:[/bold cyan] file://{doc_path}")
+        else:
+            Warning("Documentation file not found!")
+            console.print("Please ensure docs/sparm_documentation.html exists")
+    
+    def show_server_info(self):
+        """Show server information and URLs"""
+        console.print("[bold white]ℹ️  Server Information[/bold white]")
+        separator()
+        
+        console.print("[bold cyan]Local Access:[/bold cyan]")
+        console.print("• URL: http://localhost:8080/sparm_documentation.html")
+        console.print("• Start: python3 serve_docs.py")
+        
+        console.print("\n[bold cyan]Public Access (localxpose):[/bold cyan]")
+        console.print("• Setup: ./setup_public_docs.sh")
+        console.print("• Start: ./start_public_docs.sh")
+        console.print("• Token: EuuH7kG0tZTCgB3rioKeR5a24e1iWc6oFEaolvca")
+        
+        console.print("\n[bold cyan]Documentation Features:[/bold cyan]")
+        console.print("• Comprehensive tool guides")
+        console.print("• Step-by-step methodologies")
+        console.print("• Advanced red team techniques")
+        console.print("• Privacy protection guidance")
+        console.print("• Ethical hacking best practices")
+        
+        console.print("\n[bold yellow]Security Notes:[/bold yellow]")
+        console.print("• Only share public URLs with trusted individuals")
+        console.print("• Documentation contains educational cybersecurity content")
+        console.print("• Intended for authorized lab testing environments only")
+    
     def exit_application(self):
         """Exit the application"""
         clear()
-        console.print("[bold cyan]Thank you for using SPARM![/bold cyan]")
-        console.print("Remember to use these tools responsibly and ethically.")
-        console.print("\n[dim]Stay curious, stay ethical! 🛡️[/dim]")
+        console.print("[bold red]" + "─" * 50 + "[/bold red]")
+        console.print("[bold cyan]      Thank you for using SPARM! 🛡️[/bold cyan]")
+        console.print("[bold red]" + "─" * 50 + "[/bold red]")
+        console.print("[bold white]Remember:[/bold white]")
+        console.print("  • Use tools responsibly and ethically")
+        console.print("  • Only test systems you own or have permission for")
+        console.print("  • Keep learning and stay curious!")
+        console.print("[bold red]" + "─" * 50 + "[/bold red]")
+        console.print("[dim]Stay safe, stay ethical! 🔒[/dim]")
         sys.exit(0)
     
     def run(self):

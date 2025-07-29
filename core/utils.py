@@ -17,19 +17,19 @@ def clear():
     os.system('clear' if os.name == 'posix' else 'cls')
 
 def ascii_art(text):
-    """Display ASCII art banner"""
-    art = f"""
-╔═══════════════════════════════════════════════════════════════╗
-║  ███████╗██████╗  █████╗ ██████╗ ███╗   ███╗                  ║
-║  ██╔════╝██╔══██╗██╔══██╗██╔══██╗████╗ ████║                  ║
-║  ███████╗██████╔╝███████║██████╔╝██╔████╔██║                  ║
-║  ╚════██║██╔═══╝ ██╔══██║██╔══██╗██║╚██╔╝██║                  ║
-║  ███████║██║     ██║  ██║██║  ██║██║ ╚═╝ ██║                  ║
-║  ╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝                  ║
-║                                                               ║
-║        TVER EY KOR BAN OY TA COPPSARY                         ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
+    """Display compact ASCII art banner"""
+    art = """
+┌─────────────────────────────────────────────────────────┐
+│  ███████╗██████╗  █████╗ ██████╗ ███╗   ███╗             │
+│  ██╔════╝██╔══██╗██╔══██╗██╔══██╗████╗ ████║             │
+│  ███████╗██████╔╝███████║██████╔╝██╔████╔██║             │
+│  ╚════██║██╔═══╝ ██╔══██║██╔══██╗██║╚██╔╝██║             │
+│  ███████║██║     ██║  ██║██║  ██║██║ ╚═╝ ██║             │
+│  ╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝             │
+│                                                         │
+│     [bold red]S[/bold red]ecurity [bold red]P[/bold red]enetration & [bold red]A[/bold red]ttack [bold red]R[/bold red]esearch [bold red]M[/bold red]ultitool     │
+│                    [dim]v2.0.0 - Educational Use Only[/dim]           │
+└─────────────────────────────────────────────────────────┘
     """
     console.print(art, style="bold cyan")
 
@@ -86,3 +86,36 @@ def show_next_steps(current_phase, suggestions):
     for i, suggestion in enumerate(suggestions, 1):
         console.print(f"  {i}. {suggestion}")
     console.print()
+
+def compact_menu_header():
+    """Display compact menu header with system info"""
+    import platform
+    import datetime
+    
+    current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    
+    header = f"""
+[bold cyan]┌─[/bold cyan] [bold white]SPARM v2.0[/bold white] [bold cyan]─[/bold cyan] [bold green]{platform.node()}[/bold green] [bold cyan]─[/bold cyan] [bold yellow]{current_time}[/bold yellow] [bold cyan]─┐[/bold cyan]
+[bold cyan]│[/bold cyan] [bold red]Security Penetration & Attack Research Multitool[/bold red] [bold cyan]│[/bold cyan]
+[bold cyan]└─────────────────────────────────────────────────────┘[/bold cyan]
+    """
+    console.print(header)
+
+def display_compact_menu_item(number, icon, name, description, color="cyan"):
+    """Display a compact menu item"""
+    console.print(f"[bold {color}]┌─[[/bold {color}][bold white]{number:02d}[/bold white][bold {color}]][/bold {color}] {icon} [bold white]{name}[/bold white]")
+    console.print(f"[bold {color}]└──[/bold {color}] [dim]{description}[/dim]")
+
+def status_line(level, status):
+    """Display compact status line"""
+    level_colors = {
+        "beginner": "green",
+        "intermediate": "yellow", 
+        "advanced": "red"
+    }
+    color = level_colors.get(level, "cyan")
+    console.print(f"[bold {color}]▸[/bold {color}] Level: [bold white]{level.title()}[/bold white] [bold cyan]|[/bold cyan] Status: [bold green]{status}[/bold green]")
+
+def separator():
+    """Display a visual separator"""
+    console.print("[dim cyan]" + "─" * 60 + "[/dim cyan]")

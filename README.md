@@ -72,13 +72,37 @@ python multitools.py
 3. Choose from the available tool categories
 4. Follow the interactive prompts for each tool
 
-### Example Workflow
+### 📚 Enhanced Documentation
+SPARM now includes comprehensive documentation with detailed methodologies:
+
+- **Basic Documentation**: `docs/sparm_documentation.html` - Core tool usage and basic workflows
+- **Enhanced Documentation**: `docs/enhanced_documentation.html` - Advanced techniques, combos, and complete methodologies
+
+#### Documentation Features:
+- **Complete Penetration Testing Methodology**: 6-phase approach from reconnaissance to reporting
+- **Advanced Exploitation Combos**: Multi-step attack chains for web apps, networks, and databases
+- **Gaining Complete Control**: Comprehensive guide to system domination techniques
+- **Stealth and Evasion**: Advanced techniques for avoiding detection
+- **Professional Reporting**: Templates and structures for pentest reports
+
+### Example Workflow - Basic
 1. **OSINT Phase**: Use TheHarvester to gather emails and subdomains
 2. **Reconnaissance**: Scan with Nmap to discover open ports and services
 3. **Web Assessment**: Check for web vulnerabilities with the custom scanner
 4. **SQL Injection**: Test for database vulnerabilities with SQLMap
 5. **Credential Access**: Attempt to crack passwords with Hydra or John
 6. **Privilege Escalation**: Use LinPEAS to find escalation vectors
+
+### Example Workflow - Advanced Complete Control
+1. **Intelligence Gathering**: Multi-source OSINT with theHarvester, Amass, Sherlock
+2. **Active Reconnaissance**: Network mapping with Nmap, service enumeration
+3. **Vulnerability Assessment**: Automated scanning + manual testing
+4. **Initial Exploitation**: SQL injection → web shell → reverse shell
+5. **Privilege Escalation**: LinPEAS → kernel exploits → root access
+6. **Persistence**: Multiple backdoors, rootkits, scheduled tasks
+7. **Lateral Movement**: Network-wide compromise via credential reuse
+8. **Data Exfiltration**: Sensitive data collection and secure transfer
+9. **Complete Control**: Domain admin access, network-wide backdoors
 
 ## 📁 Project Structure
 ```
@@ -161,9 +185,27 @@ python3 -m venv venv && source venv/bin/activate && pip install -r requirements.
 # Launch SPARM
 ./sparm.py
 
+# View Enhanced Documentation
+firefox docs/enhanced_documentation.html
+# or
+python3 serve_docs.py  # then visit http://localhost:8080/enhanced_documentation.html
+
 # Clean installation
 rm -rf venv && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
 ```
+
+## 🔥 Advanced Features
+
+### Complete Penetration Testing Combos
+- **Web App to Shell**: SQL injection → file upload → reverse shell → privilege escalation
+- **Network Domination**: SMB exploitation → credential harvesting → lateral movement → domain compromise
+- **Stealth Operations**: Decoy scanning → obfuscated payloads → anti-forensics → persistent backdoors
+
+### Professional Methodologies
+- **OWASP Testing Guide** compliance
+- **NIST Cybersecurity Framework** alignment  
+- **PTES (Penetration Testing Execution Standard)** methodology
+- **OSSTMM (Open Source Security Testing Methodology Manual)** practices
 
 ---
 

