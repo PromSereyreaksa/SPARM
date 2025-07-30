@@ -46,9 +46,9 @@ class OSINTToolkit:
                     console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired:
                 Warning("Command timed out after 5 minutes")
-            except Exception as e:
+        except Exception as e:
                 Warning(f"Error executing command: {e}")
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
@@ -89,9 +89,9 @@ class OSINTToolkit:
                     console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired:
                 Warning("Command timed out after 10 minutes")
-            except Exception as e:
+        except Exception as e:
                 Warning(f"Error executing command: {e}")
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
@@ -116,9 +116,9 @@ class OSINTToolkit:
                     console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired:
                 Warning("Command timed out after 5 minutes")
-            except Exception as e:
+        except Exception as e:
                 Warning(f"Error executing command: {e}")
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
