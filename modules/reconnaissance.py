@@ -57,7 +57,7 @@ class ReconnaissanceToolkit:
             if result.stdout:
                 console.print("\n[bold green]Results:[/bold green]")
                 console.print(result.stdout)
-                if result.stderr:
+            if result.stderr:
                 Warning(f"Errors: {result.stderr}")
         except subprocess.TimeoutExpired:
             Warning("Command timed out after 10 minutes")
@@ -113,7 +113,7 @@ class ReconnaissanceToolkit:
             if result.stdout:
                 console.print("\n[bold green]Results:[/bold green]")
                 console.print(result.stdout)
-                if result.stderr:
+            if result.stderr:
                 Warning(f"Errors: {result.stderr}")
         except subprocess.TimeoutExpired:
             Warning("Command timed out after 10 minutes")
@@ -152,7 +152,7 @@ class ReconnaissanceToolkit:
             if result.stdout:
                 console.print("\n[bold green]Results:[/bold green]")
                 console.print(result.stdout)
-                if result.stderr:
+            if result.stderr:
                 Warning(f"Errors: {result.stderr}")
         except subprocess.TimeoutExpired:
             Warning("Command timed out after 10 minutes")

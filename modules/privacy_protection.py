@@ -28,7 +28,7 @@ class PrivacyProtection:
             try:
                 response = requests.get('https://api.ipify.org', timeout=10)
                 return response.text.strip()
-        except:
+            except:
                 return None
                 
     def check_tor_status(self):

