@@ -118,17 +118,17 @@ class SQLInjectionToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
-            try:
-                result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=1800)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 30 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+        try:
+            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=1800)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
+            if result.stderr:
+                Warning(f"Errors: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 30 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("SQL Injection", CATEGORIES["sql_injection"]["next_steps"])
     
@@ -210,9 +210,9 @@ class SQLInjectionToolkit:
                 console.print("[bold blue]→[/bold blue] In a real test, this would send an HTTP request")
                 
                 console.print("[bold yellow]Continuing to next payload...[/bold yellow]")
-                    continue
-                else:
-                    break
+                continue
+            else:
+                break
         
         show_next_steps("SQL Injection", CATEGORIES["sql_injection"]["next_steps"])
     

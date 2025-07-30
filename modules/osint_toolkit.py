@@ -83,16 +83,16 @@ class OSINTToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
         try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
+            if result.stderr:
+                Warning(f"Errors: {result.stderr}")
         except subprocess.TimeoutExpired:
-                Warning("Command timed out after 10 minutes")
+            Warning("Command timed out after 10 minutes")
         except Exception as e:
-                Warning(f"Error executing command: {e}")
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
     
@@ -110,16 +110,16 @@ class OSINTToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
         try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=300)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=300)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
+            if result.stderr:
+                Warning(f"Errors: {result.stderr}")
         except subprocess.TimeoutExpired:
-                Warning("Command timed out after 5 minutes")
+            Warning("Command timed out after 5 minutes")
         except Exception as e:
-                Warning(f"Error executing command: {e}")
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
     
