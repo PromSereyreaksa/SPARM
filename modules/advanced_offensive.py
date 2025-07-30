@@ -179,7 +179,7 @@ class AdvancedOffensiveToolkit:
                 Success(f"Linux payload generated: {output_file}")
                 console.print(f"\n[bold yellow]Make executable with:[/bold yellow] chmod +x {output_file}")
             else:
-            Warning(f"Generation failed: {result.stderr}")
+                Warning(f"Generation failed: {result.stderr}")
         except Exception as e:
             Warning(f"Error: {e}")
     
@@ -231,7 +231,7 @@ class AdvancedOffensiveToolkit:
                 Success("Sliver is installed and ready")
                 console.print(result.stdout)
             else:
-            Warning("Sliver not found. Install with: curl https://sliver.sh/install|sudo bash")
+                Warning("Sliver not found. Install with: curl https://sliver.sh/install|sudo bash")
                 return
         except FileNotFoundError:
             Warning("Sliver not installed. Install from: https://github.com/BishopFox/sliver")

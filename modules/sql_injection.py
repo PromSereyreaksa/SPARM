@@ -210,9 +210,6 @@ class SQLInjectionToolkit:
                 console.print("[bold blue]→[/bold blue] In a real test, this would send an HTTP request")
                 
                 console.print("[bold yellow]Continuing to next payload...[/bold yellow]")
-                    continue
-                else:
-                    break
         
         show_next_steps("SQL Injection", CATEGORIES["sql_injection"]["next_steps"])
     

@@ -85,7 +85,7 @@ class PrivacyProtection:
                 response = requests.get('https://ifconfig.me', proxies=proxies, timeout=10)
                 tor_ip = response.text.strip()
                 console.print(f"[bold green]Tor IP Address:[/bold green] {tor_ip}")
-        except:
+            except:
                 console.print("[bold yellow]Could not verify Tor IP address[/bold yellow]")
                 
         else:
@@ -141,7 +141,7 @@ class PrivacyProtection:
                 self.vpn_status = True
                 self.current_ip = new_ip
             else:
-            Warning("VPN connection may not be established. Check configuration.")
+                Warning("VPN connection may not be established. Check configuration.")
                 
         else:
             ErrorModule("OpenVPN config file not found!")
@@ -174,7 +174,7 @@ class PrivacyProtection:
                 self.vpn_status = True
                 self.current_ip = new_ip
             else:
-            Warning("WireGuard connection may not be established.")
+                Warning("WireGuard connection may not be established.")
                 
         else:
             ErrorModule("WireGuard config file not found!")
@@ -352,7 +352,7 @@ class PrivacyProtection:
             if self.original_ip and current_ip != self.original_ip:
                 Success("IP address has changed from original")
             else:
-            Warning("IP address appears to be unchanged")
+                Warning("IP address appears to be unchanged")
         else:
             Warning("Could not determine current IP address")
             

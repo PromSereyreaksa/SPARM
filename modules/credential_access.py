@@ -106,7 +106,7 @@ class CredentialAccessToolkit:
             service_param = selected_service
         
         # Build command
-        command = f"hydra -s {port} {user_param} {pass_param} -t {threads} {target} {service_param}"
+        command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {target} {service_param}"
         
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
