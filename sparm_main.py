@@ -861,12 +861,190 @@ class SPARMInterface:
         """Run Hydra - Network login brute-forcer"""
         banner("Hydra - Network Login Brute-Forcer")
         
-        target = get_user_input("Enter target IP/domain")
-        service = get_user_input("Enter service (ssh/ftp/http/etc.)")
-        username = get_user_input("Enter username (or 'admin' for default)")
-        wordlist = get_user_input("Enter password wordlist [default: /usr/share/wordlists/rockyou.txt]") or "/usr/share/wordlists/rockyou.txt"
+        console.print("[bold cyan]Attack modes:[/bold cyan]")
+        console.print("1. Basic login (SSH/FTP/etc.)")
+        console.print("2. HTTP POST form attack")
+        console.print("3. HTTP GET form attack")
+        console.print("4. HTTP basic auth")
         
-        command = f"hydra -l {username} -P {wordlist} {target} {service}"
+        mode = get_user_input("Choose attack mode (1-4)", choices=["1", "2", "3", "4"]) or "1"
+        target = get_user_input("Enter target IP/domain")
+        
+        if mode == "1":
+            # Basic service attack
+            service = get_user_input("Enter service (ssh/ftp/telnet/etc.)")
+            
+            console.print("\n[bold cyan]Username options:[/bold cyan]")
+            console.print("1. Single username")
+            console.print("2. Username wordlist")
+            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "1"
+            
+            if user_choice == "1":
+                username = get_user_input("Enter username") or "admin"
+                user_param = f"-l {username}"
+            else:
+                username_file = select_wordlist("usernames", "Select username wordlist")
+                if not username_file:
+                    Warning("No username wordlist selected, using default 'admin'")
+                    user_param = "-l admin"
+                else:
+                    user_param = f"-L {username_file}"
+            
+            password_file = select_wordlist("passwords", "Select password wordlist")
+            if not password_file:
+                Warning("No password wordlist found!")
+                return
+            
+            command = f"hydra {user_param} -P {password_file} {target} {service}"
+                
+        elif mode == "2":
+            # HTTP POST form attack
+            console.print("\n[bold cyan]Username options:[/bold cyan]")
+            console.print("1. Single username")
+            console.print("2. Username wordlist")
+            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
+            
+            if user_choice == "1":
+                username = get_user_input("Enter username") or "admin"
+                user_param = f"-l {username}"
+            else:
+                username_file = select_wordlist("usernames", "Select username wordlist")
+                if not username_file:
+                    Warning("Username wordlist required for HTTP form attacks!")
+                    return
+                user_param = f"-L {username_file}"
+                
+            password_file = select_wordlist("passwords", "Select password wordlist")
+            if not password_file:
+                Warning("Password wordlist required!")
+                return
+                
+            login_path = get_user_input("Enter login path [default: /login.php]") or "/login.php"
+            
+            console.print("\n[bold cyan]Form field setup:[/bold cyan]")
+            console.print("1. Use common preset (user/pass)")
+            console.print("2. Use common preset (username/password)")  
+            console.print("3. Use common preset (email/password)")
+            console.print("4. Custom field names")
+            
+            field_choice = get_user_input("Choose option (1-4)", choices=["1", "2", "3", "4"]) or "1"
+            
+            if field_choice == "1":
+                form_data = "user=^USER^&pass=^PASS^"
+            elif field_choice == "2":
+                form_data = "username=^USER^&password=^PASS^"
+            elif field_choice == "3":
+                form_data = "email=^USER^&password=^PASS^"
+            else:
+                username_field = get_user_input("Enter username field name [default: user]") or "user"
+                password_field = get_user_input("Enter password field name [default: pass]") or "pass"
+                form_data = f"{username_field}=^USER^&{password_field}=^PASS^"
+            
+            console.print(f"[bold green]Generated form data:[/bold green] {form_data}")
+            fail_string = get_user_input("Enter failure string [default: Invalid credentials]") or "Invalid credentials"
+            
+            # Handle port in target for http-post-form
+            if ':' in target and not target.startswith('http'):
+                # Target has port (e.g., localhost:8080)
+                host, port = target.split(':', 1)
+                command = f'hydra {user_param} -P {password_file} -s {port} {host} http-post-form "{login_path}:{form_data}:{fail_string}"'
+            else:
+                command = f'hydra {user_param} -P {password_file} {target} http-post-form "{login_path}:{form_data}:{fail_string}"'
+            
+        elif mode == "3":
+            # HTTP GET form attack
+            console.print("\n[bold cyan]Username options:[/bold cyan]")
+            console.print("1. Single username")
+            console.print("2. Username wordlist")
+            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
+            
+            if user_choice == "1":
+                username = get_user_input("Enter username") or "admin"
+                user_param = f"-l {username}"
+            else:
+                username_file = select_wordlist("usernames", "Select username wordlist")
+                if not username_file:
+                    Warning("Username wordlist required for HTTP form attacks!")
+                    return
+                user_param = f"-L {username_file}"
+                
+            password_file = select_wordlist("passwords", "Select password wordlist")
+            if not password_file:
+                Warning("Password wordlist required!")
+                return
+                
+            console.print("\n[bold cyan]Form field setup:[/bold cyan]")
+            console.print("1. Use common preset (user/pass)")
+            console.print("2. Use common preset (username/password)")  
+            console.print("3. Use common preset (email/password)")
+            console.print("4. Custom field names")
+            
+            field_choice = get_user_input("Choose option (1-4)", choices=["1", "2", "3", "4"]) or "1"
+            
+            if field_choice == "1":
+                login_path = "/login?user=^USER^&pass=^PASS^"
+            elif field_choice == "2":
+                login_path = "/login?username=^USER^&password=^PASS^"
+            elif field_choice == "3":
+                login_path = "/login?email=^USER^&password=^PASS^"
+            else:
+                base_path = get_user_input("Enter base login path [default: /login]") or "/login"
+                username_field = get_user_input("Enter username field name [default: user]") or "user"
+                password_field = get_user_input("Enter password field name [default: pass]") or "pass"
+                login_path = f"{base_path}?{username_field}=^USER^&{password_field}=^PASS^"
+            
+            console.print(f"[bold green]Generated login URL:[/bold green] {login_path}")
+            fail_string = get_user_input("Enter failure string [default: Invalid credentials]") or "Invalid credentials"
+            
+            # Handle port in target for http-get-form
+            if ':' in target and not target.startswith('http'):
+                # Target has port (e.g., localhost:8080)
+                host, port = target.split(':', 1)
+                command = f'hydra {user_param} -P {password_file} {host} -s {port} http-get-form "{login_path}::{fail_string}"'
+            else:
+                command = f'hydra {user_param} -P {password_file} {target} http-get-form "{login_path}::{fail_string}"'
+            
+        elif mode == "4":
+            # HTTP basic auth
+            console.print("\n[bold cyan]Username options:[/bold cyan]")
+            console.print("1. Single username")
+            console.print("2. Username wordlist")
+            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
+            
+            if user_choice == "1":
+                username = get_user_input("Enter username") or "admin"
+                user_param = f"-l {username}"
+            else:
+                username_file = select_wordlist("usernames", "Select username wordlist")
+                if not username_file:
+                    Warning("Username wordlist required for HTTP basic auth!")
+                    return
+                user_param = f"-L {username_file}"
+                
+            password_file = select_wordlist("passwords", "Select password wordlist")
+            if not password_file:
+                Warning("Password wordlist required!")
+                return
+                
+            path = get_user_input("Enter protected path [default: /]") or "/"
+            
+            # Handle port in target for http-get
+            if ':' in target and not target.startswith('http'):
+                # Target has port (e.g., localhost:8080)
+                host, port = target.split(':', 1)
+                command = f"hydra {user_param} -P {password_file} {host} -s {port} http-get {path}"
+            else:
+                command = f"hydra {user_param} -P {password_file} {target} http-get {path}"
+        
+        # Add additional options
+        console.print("\n[bold cyan]Additional options:[/bold cyan]")
+        threads = get_user_input("Number of threads [default: 16]") or "16"
+        verbose = Confirm.ask("Enable verbose output?", default=False)
+        
+        command += f" -t {threads}"
+        if verbose:
+            command += " -V"
+        
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         if check_tool_installed("hydra"):

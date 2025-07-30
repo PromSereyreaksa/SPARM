@@ -170,3 +170,7 @@ dmypy.json
 /session_logs/
 sparm.desktop
 .sparm/
+
+# SecLists wordlist repository
+SecLists-master/
+seclists-master/

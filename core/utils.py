@@ -143,24 +143,50 @@ def check_tool_installed(tool_name):
 def safe_subprocess_run(command, timeout=300, show_output=True):
     """Safely run subprocess with proper error handling"""
     import subprocess
+    import shlex
     try:
-        if isinstance(command, str):
-            command = command.split()
-        
-        result = subprocess.run(
-            command, 
-            capture_output=True, 
-            text=True, 
-            timeout=timeout,
-            check=False
-        )
+        # For complex commands with quotes, use shell=True
+        if isinstance(command, str) and ('"' in command or "'" in command):
+            result = subprocess.run(
+                command,
+                shell=True,
+                capture_output=True, 
+                text=True, 
+                timeout=timeout,
+                check=False
+            )
+        else:
+            # For simple commands, split and use shell=False
+            if isinstance(command, str):
+                command = shlex.split(command)
+            
+            result = subprocess.run(
+                command, 
+                capture_output=True, 
+                text=True, 
+                timeout=timeout,
+                check=False
+            )
         
         if show_output:
-            if result.stdout:
+            if result.stdout.strip():
                 console.print("\n[bold green]Results:[/bold green]")
-                console.print(result.stdout)
-            if result.stderr:
-                Warning(f"Errors: {result.stderr}")
+                # Escape Rich markup in output to prevent parsing errors
+                safe_stdout = result.stdout.replace('[', r'\[').replace(']', r'\]')
+                console.print(safe_stdout)
+            else:
+                console.print("\n[bold yellow]No output received from command[/bold yellow]")
+                
+            if result.stderr.strip():
+                # Escape Rich markup in error output too
+                safe_stderr = result.stderr.replace('[', r'\[').replace(']', r'\]')
+                Warning(f"Errors: {safe_stderr}")
+                
+            # Show return code for debugging
+            if result.returncode != 0:
+                console.print(f"[bold red]Exit code: {result.returncode}[/bold red]")
+            else:
+                console.print(f"[bold green]Exit code: {result.returncode}[/bold green]")
         
         return result.returncode == 0, result.stdout, result.stderr
         
@@ -168,7 +194,7 @@ def safe_subprocess_run(command, timeout=300, show_output=True):
         Warning(f"Command timed out after {timeout} seconds")
         return False, "", "Timeout"
     except FileNotFoundError:
-        Warning(f"Command not found: {command[0] if command else 'Unknown'}")
+        Warning(f"Command not found: {command[0] if isinstance(command, list) and command else 'Unknown'}")
         return False, "", "Command not found"
     except Exception as e:
         Warning(f"Error executing command: {e}")
@@ -219,3 +245,53 @@ def format_command_output(command, success, stdout, stderr):
         console.print("[bold red]✗ Command failed[/bold red]")
         if stderr:
             console.print(f"\n[bold red]Error:[/bold red] {stderr}")
+
+def get_available_wordlists(wordlist_type):
+    """Get list of available wordlists of specified type"""
+    from .config import WORDLISTS
+    import os
+    
+    if wordlist_type not in WORDLISTS:
+        return []
+    
+    available = []
+    for wordlist in WORDLISTS[wordlist_type]:
+        if os.path.exists(wordlist):
+            available.append(wordlist)
+    
+    return available
+
+def select_wordlist(wordlist_type, prompt_text=None):
+    """Interactive wordlist selection"""
+    if not prompt_text:
+        prompt_text = f"Select {wordlist_type} wordlist"
+    
+    available = get_available_wordlists(wordlist_type)
+    
+    if not available:
+        Warning(f"No {wordlist_type} wordlists found!")
+        return None
+    
+    console.print(f"\n[bold cyan]Available {wordlist_type} wordlists:[/bold cyan]")
+    for i, wordlist in enumerate(available, 1):
+        # Show just filename and size if possible
+        filename = os.path.basename(wordlist)
+        try:
+            size = os.path.getsize(wordlist)
+            size_str = f"({size//1024}KB)" if size < 1024*1024 else f"({size//1024//1024}MB)"
+        except:
+            size_str = ""
+        console.print(f"  [bold green]{i}.[/bold green] {filename} {size_str}")
+        console.print(f"      [dim]{wordlist}[/dim]")
+    
+    while True:
+        try:
+            choice = int(get_user_input(f"{prompt_text} (1-{len(available)})"))
+            if 1 <= choice <= len(available):
+                selected = available[choice - 1]
+                Success(f"Selected: {os.path.basename(selected)}")
+                return selected
+            else:
+                Warning(f"Please enter a number between 1 and {len(available)}")
+        except ValueError:
+            Warning("Please enter a valid number")

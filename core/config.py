@@ -87,12 +87,37 @@ EXPERIENCE_LEVELS = {
     }
 }
 
-# Common wordlists and paths (Kali Linux)
+# Common wordlists and paths (Kali Linux + SecLists)
 WORDLISTS = {
-    "directories": "/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt",
-    "subdomains": "/usr/share/wordlists/amass/subdomains-top1mil-5000.txt",
-    "passwords": "/usr/share/wordlists/rockyou.txt",
-    "usernames": "/usr/share/wordlists/metasploit/unix_users.txt"
+    "passwords": [
+        "/usr/share/wordlists/rockyou.txt",
+        "SecLists/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt",
+        "SecLists/Passwords/Common-Credentials/10-million-password-list-top-100000.txt",
+        "SecLists/Passwords/Common-Credentials/10-million-password-list-top-10000.txt",
+        "SecLists/Passwords/Common-Credentials/best1050.txt",
+        "SecLists/Passwords/darkweb2017-top1000.txt",
+        "SecLists/Passwords/xato-net-10-million-passwords-1000000.txt"
+    ],
+    "usernames": [
+        "/usr/share/wordlists/metasploit/unix_users.txt",
+        "SecLists/Usernames/Names/names.txt",
+        "SecLists/Usernames/top-usernames-shortlist.txt",
+        "SecLists/Usernames/xato-net-10-million-usernames.txt",
+        "SecLists/Usernames/cirt-default-usernames.txt"
+    ],
+    "directories": [
+        "/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt",
+        "SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt",
+        "SecLists/Discovery/Web-Content/common.txt",
+        "SecLists/Discovery/Web-Content/big.txt",
+        "SecLists/Discovery/Web-Content/raft-medium-directories.txt"
+    ],
+    "subdomains": [
+        "/usr/share/wordlists/amass/subdomains-top1mil-5000.txt",
+        "SecLists/Discovery/DNS/subdomains-top1million-5000.txt",
+        "SecLists/Discovery/DNS/subdomains-top1million-20000.txt",
+        "SecLists/Discovery/DNS/fierce-hostlist.txt"
+    ]
 }
 
 # Tool paths (common Kali Linux locations)
