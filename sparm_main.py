@@ -62,10 +62,7 @@ class SPARMInterface:
             ("0", "🚪", "Exit", "Exit SPARM safely", "dim")
         ]
         
-        for i, (choice, icon, name, description, color) in enumerate(menu_items):
-            if i % 2 == 0 and i > 0:
-                console.print()
-            display_compact_menu_item(int(choice) if choice != "0" else 0, icon, name, description, color)
+        display_three_row_menu(menu_items)
         
         separator()
         return get_user_input("[bold cyan]SPARM[/bold cyan] > Select option", choices=[item[0] for item in menu_items])

@@ -106,6 +106,21 @@ def display_compact_menu_item(number, icon, name, description, color="cyan"):
     console.print(f"[bold {color}]┌─[[/bold {color}][bold white]{number:02d}[/bold white][bold {color}]][/bold {color}] {icon} [bold white]{name}[/bold white]")
     console.print(f"[bold {color}]└──[/bold {color}] [dim]{description}[/dim]")
 
+def display_three_row_menu(menu_items):
+    """Display menu items in three rows"""
+    rows = [[], [], []]
+    
+    # Distribute items across three rows
+    for i, item in enumerate(menu_items):
+        rows[i % 3].append(item)
+    
+    # Display each row
+    for row_index, row in enumerate(rows):
+        if row:  # Only display if row has items
+            console.print(f"\n[bold cyan]Row {row_index + 1}:[/bold cyan]")
+            for choice, icon, name, description, color in row:
+                console.print(f"  [bold {color}][{choice}][/bold {color}] {icon} [bold white]{name}[/bold white] - [dim]{description}[/dim]")
+
 def status_line(level, status):
     """Display compact status line"""
     level_colors = {
@@ -119,3 +134,88 @@ def status_line(level, status):
 def separator():
     """Display a visual separator"""
     console.print("[dim cyan]" + "─" * 60 + "[/dim cyan]")
+
+def check_tool_installed(tool_name):
+    """Check if a tool is installed and accessible"""
+    import shutil
+    return shutil.which(tool_name) is not None
+
+def safe_subprocess_run(command, timeout=300, show_output=True):
+    """Safely run subprocess with proper error handling"""
+    import subprocess
+    try:
+        if isinstance(command, str):
+            command = command.split()
+        
+        result = subprocess.run(
+            command, 
+            capture_output=True, 
+            text=True, 
+            timeout=timeout,
+            check=False
+        )
+        
+        if show_output:
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
+            if result.stderr:
+                Warning(f"Errors: {result.stderr}")
+        
+        return result.returncode == 0, result.stdout, result.stderr
+        
+    except subprocess.TimeoutExpired:
+        Warning(f"Command timed out after {timeout} seconds")
+        return False, "", "Timeout"
+    except FileNotFoundError:
+        Warning(f"Command not found: {command[0] if command else 'Unknown'}")
+        return False, "", "Command not found"
+    except Exception as e:
+        Warning(f"Error executing command: {e}")
+        return False, "", str(e)
+
+def validate_ip(ip_address):
+    """Validate IP address format"""
+    import ipaddress
+    try:
+        ipaddress.ip_address(ip_address)
+        return True
+    except ValueError:
+        return False
+
+def validate_domain(domain):
+    """Validate domain name format"""
+    import re
+    pattern = r'^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$'
+    return re.match(pattern, domain) is not None
+
+def get_target_input(prompt="Enter target", allow_ip=True, allow_domain=True):
+    """Get and validate target input (IP or domain)"""
+    while True:
+        target = get_user_input(prompt)
+        
+        if allow_ip and validate_ip(target):
+            return target
+        elif allow_domain and validate_domain(target):
+            return target
+        else:
+            valid_types = []
+            if allow_ip:
+                valid_types.append("IP address")
+            if allow_domain:
+                valid_types.append("domain name")
+            Warning(f"Invalid target. Please enter a valid {' or '.join(valid_types)}")
+
+def format_command_output(command, success, stdout, stderr):
+    """Format command output consistently"""
+    console.print(f"\n[bold yellow]Command:[/bold yellow] {' '.join(command) if isinstance(command, list) else command}")
+    
+    if success:
+        console.print("[bold green]✓ Command executed successfully[/bold green]")
+        if stdout:
+            console.print("\n[bold green]Output:[/bold green]")
+            console.print(stdout)
+    else:
+        console.print("[bold red]✗ Command failed[/bold red]")
+        if stderr:
+            console.print(f"\n[bold red]Error:[/bold red] {stderr}")

@@ -53,16 +53,16 @@ class ReconnaissanceToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
         try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 10 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+                Warning(f"Errors: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 10 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Reconnaissance", CATEGORIES["recon"]["next_steps"])
     
@@ -109,16 +109,16 @@ class ReconnaissanceToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
         try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 10 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+                Warning(f"Errors: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 10 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Reconnaissance", CATEGORIES["recon"]["next_steps"])
     
@@ -148,16 +148,16 @@ class ReconnaissanceToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
         try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 10 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+                Warning(f"Errors: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 10 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Reconnaissance", CATEGORIES["recon"]["next_steps"])
     

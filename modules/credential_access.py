@@ -111,17 +111,17 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
-            try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=1800)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+        try:
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=1800)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 30 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 30 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
@@ -192,17 +192,17 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
-            try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+        try:
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 1 hour")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 1 hour")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
@@ -268,17 +268,17 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
-            try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+        try:
+            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
                     Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 1 hour")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 1 hour")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     

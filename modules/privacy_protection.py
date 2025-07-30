@@ -2,7 +2,6 @@
 """
 Privacy Protection Module for SPARM
 Handles VPN, Tor, and network isolation for lab environments
-Educational/Research Use Only - Authorized Testing Required
 """
 
 import os
@@ -29,7 +28,7 @@ class PrivacyProtection:
             try:
                 response = requests.get('https://api.ipify.org', timeout=10)
                 return response.text.strip()
-            except:
+        except:
                 return None
                 
     def check_tor_status(self):
@@ -86,7 +85,7 @@ class PrivacyProtection:
                 response = requests.get('https://ifconfig.me', proxies=proxies, timeout=10)
                 tor_ip = response.text.strip()
                 console.print(f"[bold green]Tor IP Address:[/bold green] {tor_ip}")
-            except:
+        except:
                 console.print("[bold yellow]Could not verify Tor IP address[/bold yellow]")
                 
         else:
@@ -142,7 +141,7 @@ class PrivacyProtection:
                 self.vpn_status = True
                 self.current_ip = new_ip
             else:
-                Warning("VPN connection may not be established. Check configuration.")
+            Warning("VPN connection may not be established. Check configuration.")
                 
         else:
             ErrorModule("OpenVPN config file not found!")
@@ -175,7 +174,7 @@ class PrivacyProtection:
                 self.vpn_status = True
                 self.current_ip = new_ip
             else:
-                Warning("WireGuard connection may not be established.")
+            Warning("WireGuard connection may not be established.")
                 
         else:
             ErrorModule("WireGuard config file not found!")
@@ -257,8 +256,6 @@ class PrivacyProtection:
         console.print("[bold cyan]Configuring iptables for lab isolation...[/bold cyan]\n")
         
         console.print("[bold yellow]Warning:[/bold yellow] This will modify system firewall rules!")
-        if not Confirm.ask("Continue with iptables configuration?"):
-            return
             
         # Backup current rules
         console.print("[bold cyan]Backing up current iptables rules...[/bold cyan]")
@@ -355,7 +352,7 @@ class PrivacyProtection:
             if self.original_ip and current_ip != self.original_ip:
                 Success("IP address has changed from original")
             else:
-                Warning("IP address appears to be unchanged")
+            Warning("IP address appears to be unchanged")
         else:
             Warning("Could not determine current IP address")
             
@@ -430,7 +427,7 @@ def show_privacy_guidelines():
     console.print("• Follow responsible disclosure for any findings")
     console.print("• Maintain detailed logs for compliance")
     console.print("• Respect privacy and data protection laws")
-    console.print("• Use tools only for educational and authorized purposes")
+    console.print("• Use tools only for educational purposes")
     
     console.print("\n[bold cyan]Technical Security:[/bold cyan]")
     console.print("• Encrypt all traffic between attacker and target machines")

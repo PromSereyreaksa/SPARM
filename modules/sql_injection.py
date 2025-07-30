@@ -119,16 +119,16 @@ class SQLInjectionToolkit:
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
             try:
-                result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=1800)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
+            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=1800)
+            if result.stdout:
+                console.print("\n[bold green]Results:[/bold green]")
+                console.print(result.stdout)
                 if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-            except subprocess.TimeoutExpired:
-                Warning("Command timed out after 30 minutes")
-            except Exception as e:
-                Warning(f"Error executing command: {e}")
+                Warning(f"Errors: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            Warning("Command timed out after 30 minutes")
+        except Exception as e:
+            Warning(f"Error executing command: {e}")
         
         show_next_steps("SQL Injection", CATEGORIES["sql_injection"]["next_steps"])
     

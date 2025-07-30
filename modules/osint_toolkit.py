@@ -21,7 +21,13 @@ class OSINTToolkit:
         """TheHarvester - Email and subdomain harvesting"""
         banner("TheHarvester - Email & Subdomain Harvesting")
         
-        domain = get_user_input("Enter target domain (e.g., example.com)")
+        # Check if tool is installed
+        if not check_tool_installed("theHarvester"):
+            Warning("theHarvester is not installed. Please install it first.")
+            console.print("Install with: sudo apt install theharvester")
+            return
+        
+        domain = get_target_input("Enter target domain (e.g., example.com)", allow_ip=False, allow_domain=True)
         limit = get_user_input("Enter email limit", choices=["100", "200", "500"]) or "100"
         
         sources = ["google", "bing", "yahoo", "duckduckgo", "linkedin", "twitter"]
@@ -38,18 +44,8 @@ class OSINTToolkit:
         
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
-        console.print(f"\n[bold green]Executing: {command}[/bold green]")
-        try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=300)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-        except subprocess.TimeoutExpired:
-                Warning("Command timed out after 5 minutes")
-        except Exception as e:
-                Warning(f"Error executing command: {e}")
+        success, stdout, stderr = safe_subprocess_run(command, timeout=300)
+        format_command_output(command, success, stdout, stderr)
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
     
@@ -57,7 +53,13 @@ class OSINTToolkit:
         """Amass - Subdomain enumeration"""
         banner("Amass - Attack Surface Mapping")
         
-        domain = get_user_input("Enter target domain (e.g., example.com)")
+        # Check if tool is installed
+        if not check_tool_installed("amass"):
+            Warning("Amass is not installed. Please install it first.")
+            console.print("Install with: sudo apt install amass")
+            return
+        
+        domain = get_target_input("Enter target domain (e.g., example.com)", allow_ip=False, allow_domain=True)
         
         console.print("\n[bold cyan]Amass scan types:[/bold cyan]")
         scan_types = {
@@ -81,24 +83,20 @@ class OSINTToolkit:
         
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
-        console.print(f"\n[bold green]Executing: {command}[/bold green]")
-        try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=600)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-        except subprocess.TimeoutExpired:
-                Warning("Command timed out after 10 minutes")
-        except Exception as e:
-                Warning(f"Error executing command: {e}")
+        success, stdout, stderr = safe_subprocess_run(command, timeout=600)
+        format_command_output(command, success, stdout, stderr)
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
     
     def run_sherlock(self):
         """Sherlock - Social media username hunting"""
         banner("Sherlock - Social Media Account Hunter")
+        
+        # Check if tool is installed
+        if not check_tool_installed("sherlock"):
+            Warning("Sherlock is not installed. Please install it first.")
+            console.print("Install with: pip3 install sherlock-project")
+            return
         
         username = get_user_input("Enter username to search for")
         
@@ -108,18 +106,8 @@ class OSINTToolkit:
         
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
-        console.print(f"\n[bold green]Executing: {command}[/bold green]")
-        try:
-                result = subprocess.run(command.split(), capture_output=True, text=True, timeout=300)
-                if result.stdout:
-                    console.print("\n[bold green]Results:[/bold green]")
-                    console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-        except subprocess.TimeoutExpired:
-                Warning("Command timed out after 5 minutes")
-        except Exception as e:
-                Warning(f"Error executing command: {e}")
+        success, stdout, stderr = safe_subprocess_run(command, timeout=300)
+        format_command_output(command, success, stdout, stderr)
         
         show_next_steps("OSINT", CATEGORIES["osint"]["next_steps"])
     
