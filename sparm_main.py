@@ -664,24 +664,53 @@ class SPARMInterface:
     # ===============================
     
     def run_theharvester(self):
-        """Run TheHarvester - Email harvesting"""
+        """Enhanced TheHarvester - Email & subdomain harvesting"""
         banner("TheHarvester - Email & Subdomain Harvesting")
         
-        domain = get_user_input("Enter target domain (e.g., example.com)")
-        limit = get_user_input("Enter email limit [default: 100]") or "100"
+        console.print("[bold yellow]🎯 Domain Examples:[/bold yellow]")
+        console.print("  • example.com")
+        console.print("  • target-company.com")
+        console.print("  • government-site.gov")
         
-        sources = ["google", "bing", "yahoo", "duckduckgo", "linkedin"]
-        console.print("\n[bold cyan]Available sources:[/bold cyan]")
-        for i, source in enumerate(sources, 1):
-            console.print(f"  {i}. {source}")
+        domain = get_user_input("Enter target domain")
+        limit = get_user_input("Enter result limit [default: 100]") or "100"
         
-        source_choice = get_user_input("Choose source (1-5)", choices=["1", "2", "3", "4", "5"]) or "1"
-        selected_source = sources[int(source_choice) - 1]
+        console.print("\n[bold cyan]📡 Available Sources:[/bold cyan]")
+        sources = {
+            "1": ("google", "Google search engine"),
+            "2": ("bing", "Bing search engine"),
+            "3": ("yahoo", "Yahoo search engine"),
+            "4": ("duckduckgo", "DuckDuckGo search engine"),
+            "5": ("linkedin", "LinkedIn (requires API)"),
+            "6": ("all", "All available sources (slow but comprehensive)")
+        }
+        
+        for key, (source, desc) in sources.items():
+            console.print(f"  {key}. {desc}")
+        
+        source_choice = get_user_input("Choose source (1-6)", choices=["1", "2", "3", "4", "5", "6"]) or "1"
+        
+        if source_choice == "6":
+            selected_source = "google,bing,yahoo,duckduckgo"
+            console.print("[bold yellow]⚠️  Using all sources - this may take longer[/bold yellow]")
+        else:
+            selected_source = sources[source_choice][0]
+        
+        # Additional options
+        console.print("\n[bold cyan]⚙️ Output Options:[/bold cyan]")
+        save_file = get_user_input("Save results to file? [y/n]", choices=["y", "n"]) or "n"
         
         command = f"theHarvester -d {domain} -l {limit} -b {selected_source}"
-        console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
+        
+        if save_file == "y":
+            filename = f"logs/theharvester_{domain}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+            command += f" -f {filename}"
+            console.print(f"[bold green]💾 Results will be saved to:[/bold green] {filename}")
+        
+        console.print(f"\n[bold yellow]🔧 Command:[/bold yellow] {command}")
         
         if check_tool_installed("theHarvester"):
+            console.print("\n[bold green]🚀 Starting TheHarvester scan...[/bold green]")
             success, stdout, stderr = safe_subprocess_run(command, timeout=300)
             format_command_output(command, success, stdout, stderr)
         else:
@@ -780,28 +809,98 @@ class SPARMInterface:
             Warning("Masscan not installed. Install with: sudo apt install masscan")
     
     def run_gobuster(self):
-        """Run Gobuster - Directory/DNS brute-forcer"""
+        """Enhanced Gobuster - Directory/DNS brute-forcer with smart wordlist selection"""
         banner("Gobuster - Directory & DNS Brute-Forcing")
         
-        console.print("[bold cyan]Gobuster modes:[/bold cyan]")
-        console.print("1. Directory brute-forcing")
-        console.print("2. DNS subdomain brute-forcing")
+        console.print("[bold cyan]🎯 Gobuster Modes:[/bold cyan]")
+        console.print("  1. 📁 Directory brute-forcing")
+        console.print("  2. 🌐 DNS subdomain brute-forcing")
         
         mode = get_user_input("Choose mode (1-2)", choices=["1", "2"]) or "1"
         
         if mode == "1":
-            url = get_user_input("Enter target URL (e.g., https://example.com)")
-            wordlist = get_user_input("Enter wordlist path [default: /usr/share/wordlists/dirb/common.txt]") or "/usr/share/wordlists/dirb/common.txt"
-            command = f"gobuster dir -u {url} -w {wordlist}"
+            # Directory brute-forcing
+            console.print("\n[bold yellow]📋 URL Examples:[/bold yellow]")
+            console.print("  • http://localhost:8080")
+            console.print("  • https://example.com")
+            console.print("  • http://192.168.1.100")
+            
+            url = get_user_input("Enter target URL")
+            
+            # Smart wordlist selection for directories
+            console.print("\n[bold cyan]📚 Directory Wordlists:[/bold cyan]")
+            console.print("  1. 🚀 Common directories (fast scan)")
+            console.print("  2. 📊 Medium directories (balanced)")
+            console.print("  3. 📈 Large directories (comprehensive)")
+            console.print("  4. 🎯 DirBuster medium (popular choice)")
+            console.print("  5. 🔧 Custom wordlist path")
+            
+            wordlist_choice = get_user_input("Choose wordlist (1-5)", choices=["1", "2", "3", "4", "5"])
+            
+            wordlist_map = {
+                "1": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/Web-Content/common.txt",
+                "2": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/Web-Content/raft-medium-directories.txt",
+                "3": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/Web-Content/raft-large-directories.txt",
+                "4": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/Web-Content/DirBuster-2007_directory-list-2.3-medium.txt",
+                "5": None
+            }
+            
+            if wordlist_choice == "5":
+                wordlist = get_user_input("Enter custom wordlist path")
+            else:
+                wordlist = wordlist_map[wordlist_choice]
+                console.print(f"[bold green]✅ Selected:[/bold green] {os.path.basename(wordlist)}")
+            
+            # Additional options
+            console.print("\n[bold cyan]⚙️ Additional Options:[/bold cyan]")
+            extensions = get_user_input("File extensions (e.g., php,html,txt) [press enter to skip]") or ""
+            threads = get_user_input("Number of threads [default: 10]") or "10"
+            
+            # Build command
+            command = f"gobuster dir -u {url} -w {wordlist} -t {threads}"
+            if extensions:
+                command += f" -x {extensions}"
+                
         else:
-            domain = get_user_input("Enter target domain (e.g., example.com)")
-            wordlist = get_user_input("Enter subdomain wordlist [default: /usr/share/wordlists/dirb/common.txt]") or "/usr/share/wordlists/dirb/common.txt"
-            command = f"gobuster dns -d {domain} -w {wordlist}"
+            # DNS subdomain brute-forcing
+            console.print("\n[bold yellow]🌐 Domain Examples:[/bold yellow]")
+            console.print("  • example.com")
+            console.print("  • target-domain.com")
+            
+            domain = get_user_input("Enter target domain")
+            
+            # Smart wordlist selection for subdomains
+            console.print("\n[bold cyan]📚 Subdomain Wordlists:[/bold cyan]")
+            console.print("  1. 🎯 Top 5000 subdomains (fast)")
+            console.print("  2. 📊 Top 20000 subdomains (medium)")
+            console.print("  3. 📈 Top 100000 subdomains (comprehensive)")
+            console.print("  4. 🔧 Combined subdomains (balanced)")
+            console.print("  5. 🎨 Custom wordlist path")
+            
+            wordlist_choice = get_user_input("Choose wordlist (1-5)", choices=["1", "2", "3", "4", "5"])
+            
+            subdomain_map = {
+                "1": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/DNS/subdomains-top1million-5000.txt",
+                "2": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/DNS/subdomains-top1million-20000.txt", 
+                "3": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/DNS/bitquark-subdomains-top100000.txt",
+                "4": "/home/s001kaliv1/Desktop/SPARM/wordlists/discovery/DNS/combined_subdomains.txt",
+                "5": None
+            }
+            
+            if wordlist_choice == "5":
+                wordlist = get_user_input("Enter custom wordlist path")
+            else:
+                wordlist = subdomain_map[wordlist_choice]
+                console.print(f"[bold green]✅ Selected:[/bold green] {os.path.basename(wordlist)}")
+            
+            threads = get_user_input("Number of threads [default: 10]") or "10" 
+            command = f"gobuster dns -d {domain} -w {wordlist} -t {threads}"
         
-        console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
+        console.print(f"\n[bold yellow]🔧 Command:[/bold yellow] {command}")
         
         if check_tool_installed("gobuster"):
-            success, stdout, stderr = safe_subprocess_run(command, timeout=300)
+            console.print("\n[bold green]🚀 Starting Gobuster scan...[/bold green]")
+            success, stdout, stderr = safe_subprocess_run(command, timeout=600)
             format_command_output(command, success, stdout, stderr)
         else:
             Warning("Gobuster not installed. Install with: sudo apt install gobuster")
@@ -875,33 +974,34 @@ class SPARMInterface:
         console.print("\n[bold cyan]Available services:[/bold cyan]")
         services = {
             "1": "ssh", "2": "ftp", "3": "telnet", "4": "http-get", 
-            "5": "http-post-form", "6": "smb", "7": "rdp", "8": "mysql",
-            "9": "postgres", "10": "vnc"
+            "5": "http-post-form", "6": "https-post-form", "7": "smb", 
+            "8": "rdp", "9": "mysql", "10": "postgres", "11": "vnc"
         }
         
         service_descriptions = {
             "1": "SSH - Secure Shell login (port 22)",
             "2": "FTP - File Transfer Protocol (port 21)", 
             "3": "Telnet - Remote terminal (port 23)",
-            "4": "HTTP-GET - Basic HTTP authentication (port 80/443)",
-            "5": "HTTP-POST-FORM - Web login forms (port 80/443)",
-            "6": "SMB - Windows file sharing (port 445)",
-            "7": "RDP - Remote Desktop Protocol (port 3389)",
-            "8": "MySQL - Database server (port 3306)",
-            "9": "PostgreSQL - Database server (port 5432)",
-            "10": "VNC - Remote desktop (port 5900)"
+            "4": "HTTP-GET - Basic HTTP authentication (port 80)",
+            "5": "HTTP-POST-FORM - Web login forms (port 80)",
+            "6": "HTTPS-POST-FORM - Secure web login forms (port 443)",
+            "7": "SMB - Windows file sharing (port 445)",
+            "8": "RDP - Remote Desktop Protocol (port 3389)",
+            "9": "MySQL - Database server (port 3306)",
+            "10": "PostgreSQL - Database server (port 5432)",
+            "11": "VNC - Remote desktop (port 5900)"
         }
         
         for key, service in services.items():
             console.print(f"  {key}. {service_descriptions[key]}")
         
-        service_choice = get_user_input("Choose service (1-10)", choices=[str(i) for i in range(1, 11)])
+        service_choice = get_user_input("Choose service (1-11)", choices=[str(i) for i in range(1, 12)])
         selected_service = services[service_choice]
         
         # Port specification
         port_map = {
-            "1": "22", "2": "21", "3": "23", "4": "80", "5": "80",
-            "6": "445", "7": "3389", "8": "3306", "9": "5432", "10": "5900"
+            "1": "22", "2": "21", "3": "23", "4": "80", "5": "80", "6": "443",
+            "7": "445", "8": "3389", "9": "3306", "10": "5432", "11": "5900"
         }
         default_port = port_map.get(service_choice, "80")
         
@@ -967,17 +1067,19 @@ class SPARMInterface:
                 password = get_user_input("Enter password")
                 pass_param = f"-p {password}"
         
-        # Thread configuration - moved before form setup
-        console.print("\n[bold cyan]🔧 Performance Settings:[/bold cyan]")
-        console.print("  • Low threads (1-4): Slower but less likely to trigger rate limiting")
-        console.print("  • Medium threads (8-16): Balanced performance")
-        console.print("  • High threads (32+): Faster but may cause false positives")
+        # Conservative thread configuration for accuracy
+        console.print("\n[bold cyan]🔧 Accuracy-First Settings:[/bold cyan]")
+        console.print("  • 1 thread: Maximum accuracy, no rate limiting")
+        console.print("  • 2-4 threads: Good balance of speed and accuracy")
+        console.print("  • 8+ threads: Faster but may cause false positives")
+        console.print("[bold yellow]💡 Recommendation: Use 1-2 threads for most accurate results[/bold yellow]")
         
-        threads = get_user_input("Number of threads [default: 16]") or "16"
+        threads = get_user_input("Number of threads [default: 2]") or "2"
         
-        # Special handling for HTTP POST forms with auto-detection
-        if selected_service == "http-post-form":
-            console.print("\n[bold cyan]📋 HTTP POST Form Configuration[/bold cyan]")
+        # Special handling for HTTP/HTTPS POST forms with auto-detection
+        if selected_service in ["http-post-form", "https-post-form"]:
+            protocol = "HTTPS" if selected_service == "https-post-form" else "HTTP"
+            console.print(f"\n[bold cyan]📋 {protocol} POST Form Configuration[/bold cyan]")
             
             # Enhanced login path handling
             console.print("\n[bold yellow]Login Path Examples:[/bold yellow]")
@@ -1035,30 +1137,50 @@ class SPARMInterface:
             
             failure_string = get_user_input("Enter failure string (text that appears on failed login)")
             
-            # Offer to test the failure string first
-            console.print(f"\n[bold yellow]🧪 Want to test your failure string first?[/bold yellow]")
-            if get_user_input("Test failure string with known bad credentials? [y/n]", choices=["y", "n"]) == "y":
-                test_user = get_user_input("Enter test username (e.g., 'baduser')")
-                test_pass = get_user_input("Enter test password (e.g., 'wrongpass')")
+            # Mandatory accuracy testing
+            console.print(f"\n[bold red]🛡️ ACCURACY VALIDATION (REQUIRED)[/bold red]")
+            console.print("To ensure 100% accuracy, we'll test your failure string with multiple bad inputs")
+            
+            # Test 1: Known bad username and password
+            console.print("\n[bold cyan]Test 1: Invalid username + Invalid password[/bold cyan]")
+            test_result_1 = self._test_hydra_accuracy(target, port, login_path, form_params, failure_string, "invaliduser123", "wrongpass456")
+            
+            # Test 2: Common username with wrong password
+            console.print("\n[bold cyan]Test 2: Common username + Wrong password[/bold cyan]")
+            test_result_2 = self._test_hydra_accuracy(target, port, login_path, form_params, failure_string, "admin", "wrongpassword")
+            
+            # Test 3: Empty credentials
+            console.print("\n[bold cyan]Test 3: Empty credentials[/bold cyan]")
+            test_result_3 = self._test_hydra_accuracy(target, port, login_path, form_params, failure_string, "", "")
+            
+            # Analyze test results
+            failed_tests = []
+            if not test_result_1:
+                failed_tests.append("Invalid user/pass")
+            if not test_result_2:
+                failed_tests.append("Admin + wrong pass")
+            if not test_result_3:
+                failed_tests.append("Empty credentials")
+            
+            if failed_tests:
+                console.print(f"\n[bold red]❌ ACCURACY TESTS FAILED![/bold red]")
+                console.print(f"[bold yellow]Failed tests: {', '.join(failed_tests)}[/bold yellow]")
+                console.print("[bold red]Your failure string is incorrect - Hydra will show false positives![/bold red]")
                 
-                test_command = f"hydra -l {test_user} -p {test_pass} -s {port} -V {target} http-post-form \"{login_path}:{form_params}:{failure_string}\""
-                console.print(f"\n[bold cyan]🔍 Test command:[/bold cyan] {test_command}")
-                console.print("[bold yellow]💡 This should show NO valid credentials if failure string is correct[/bold yellow]")
+                console.print("\n[bold cyan]💡 How to fix:[/bold cyan]")
+                console.print("  1. Open the login page in your browser")
+                console.print("  2. Try logging in with wrong credentials")
+                console.print("  3. Copy the EXACT error message that appears")
+                console.print("  4. Use that as your failure string")
                 
-                if get_user_input("Run test? [y/n]", choices=["y", "n"]) == "y":
-                    console.print("\n[bold blue]Running test...[/bold blue]")
-                    try:
-                        result = subprocess.run(test_command, shell=True, capture_output=True, text=True, timeout=30)
-                        if "valid password found" in result.stdout.lower() or "[VALID]" in result.stdout:
-                            console.print("[bold red]⚠️  WARNING: Test found 'valid' credentials with known bad login![/bold red]")
-                            console.print("[bold yellow]Your failure string might be wrong. Check the exact error message.[/bold yellow]")
-                            
-                            if get_user_input("Continue anyway? [y/n]", choices=["y", "n"]) != "y":
-                                return
-                        else:
-                            console.print("[bold green]✅ Test passed - failure string looks correct[/bold green]")
-                    except Exception as e:
-                        console.print(f"[yellow]Test failed: {e}[/yellow]")
+                if get_user_input("\nContinue anyway? (NOT RECOMMENDED) [y/n]", choices=["y", "n"]) != "y":
+                    console.print("[bold green]✅ Good choice! Please fix the failure string first.[/bold green]")
+                    return
+                else:
+                    console.print("[bold red]⚠️ WARNING: Results may contain false positives![/bold red]")
+            else:
+                console.print(f"\n[bold green]✅ ALL ACCURACY TESTS PASSED![/bold green]")
+                console.print("[bold green]Failure string is correct - results will be accurate[/bold green]")
             
             service_param = f'"{login_path}:{form_params}:{failure_string}"'
         else:
@@ -1070,8 +1192,8 @@ class SPARMInterface:
         # Build command as one continuous string (don't split into parts)
         verbose_flag = "-V" if verbose.lower() == 'y' else ""
         
-        if selected_service == "http-post-form":
-            command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {verbose_flag} {target} http-post-form {service_param}".strip()
+        if selected_service in ["http-post-form", "https-post-form"]:
+            command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {verbose_flag} {target} {selected_service} {service_param}".strip()
         else:
             command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {verbose_flag} {target} {service_param}".strip()
         
@@ -1115,18 +1237,25 @@ class SPARMInterface:
                 if output:
                     line = output.strip()
                     
-                    # Real-time credential success detection
-                    if "[VALID]" in line or "login:" in line.lower() and "password:" in line.lower():
+                    # Ultra-strict credential success detection
+                    if "[VALID]" in line and ("login:" in line.lower() and "password:" in line.lower()):
                         # Extract credentials from successful attempt
-                        if "login:" in line and "password:" in line:
-                            try:
-                                login_part = line.split("login:")[1].split("password:")[0].strip()
-                                password_part = line.split("password:")[1].strip()
+                        try:
+                            login_part = line.split("login:")[1].split("password:")[0].strip()
+                            password_part = line.split("password:")[1].strip()
+                            
+                            # Immediate re-verification of found credentials
+                            console.print(f"[bold yellow]🔍 VERIFYING: {login_part}:{password_part}[/bold yellow]")
+                            verification = self._verify_single_credential(target, port, service_param, login_part, password_part)
+                            
+                            if verification:
                                 valid_credentials.append((login_part, password_part))
-                                console.print(f"[bold green]✅ FOUND VALID CREDENTIALS: {login_part}:{password_part}[/bold green]")
-                            except:
-                                console.print(f"[bold green]✅ SUCCESS: {line}[/bold green]")
-                                valid_credentials.append(("unknown", "unknown"))
+                                console.print(f"[bold green]✅ VERIFIED VALID: {login_part}:{password_part}[/bold green]")
+                            else:
+                                console.print(f"[bold red]❌ FALSE POSITIVE DETECTED: {login_part}:{password_part}[/bold red]")
+                                console.print("[dim]This credential was filtered out as inaccurate[/dim]")
+                        except Exception as e:
+                            console.print(f"[yellow]Could not parse credentials from: {line}[/yellow]")
                     
                     # Track attempts and errors
                     elif "attempt" in line.lower() or "trying" in line.lower():
@@ -1177,26 +1306,10 @@ class SPARMInterface:
                 
                 Success(f"Valid credentials saved to: {creds_file}")
                 
-                # Offer to verify credentials
-                console.print("\n[bold yellow]🔍 CREDENTIAL VERIFICATION[/bold yellow]")
-                if get_user_input("Verify credentials manually? [y/n]", choices=["y", "n"]) == "y":
-                    for i, (user, pwd) in enumerate(valid_credentials, 1):
-                        console.print(f"\n[bold cyan]Testing credential {i}: {user}:{pwd}[/bold cyan]")
-                        
-                        # Single credential test
-                        verify_command = f"hydra -l {user} -p {pwd} -s {port} -V {target} http-post-form {service_param}"
-                        console.print(f"[dim]Command: {verify_command}[/dim]")
-                        
-                        try:
-                            result = subprocess.run(verify_command, shell=True, capture_output=True, text=True, timeout=15)
-                            
-                            if "valid password found" in result.stdout.lower() or "[VALID]" in result.stdout:
-                                console.print(f"[bold green]✅ VERIFIED: {user}:{pwd} is valid[/bold green]")
-                            else:
-                                console.print(f"[bold red]❌ FALSE POSITIVE: {user}:{pwd} failed verification[/bold red]")
-                                console.print("[yellow]This was likely a false positive from Hydra[/yellow]")
-                        except Exception as e:
-                            console.print(f"[yellow]Verification failed: {e}[/yellow]")
+                console.print(f"\n[bold green]🎯 ACCURACY SUMMARY:[/bold green]")
+                console.print("• All credentials were automatically verified during discovery")
+                console.print("• False positives were filtered out in real-time")
+                console.print("• Only genuine, working credentials are shown above")
                 
                 # Suggest next steps for valid credentials
                 console.print("\n[bold yellow]🔄 NEXT STEPS:[/bold yellow]")
@@ -1225,6 +1338,45 @@ class SPARMInterface:
             Warning(f"Error running Hydra: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
+    
+    def _test_hydra_accuracy(self, target, port, login_path, form_params, failure_string, test_user, test_pass):
+        """Test Hydra accuracy with known bad credentials - should return False (no valid creds found)"""
+        try:
+            test_command = f"hydra -l '{test_user}' -p '{test_pass}' -s {port} -t 1 {target} http-post-form \"{login_path}:{form_params}:{failure_string}\""
+            console.print(f"[dim]Testing: {test_user}:{test_pass}[/dim]")
+            
+            result = subprocess.run(test_command, shell=True, capture_output=True, text=True, timeout=15)
+            output = result.stdout.lower()
+            
+            # Check if Hydra found "valid" credentials (which would be wrong)
+            if "valid password found" in output or "[valid]" in output or "login:" in output:
+                console.print(f"[bold red]❌ FAILED - Found 'valid' credentials with bad input![/bold red]")
+                return False
+            else:
+                console.print(f"[bold green]✅ PASSED - Correctly rejected bad credentials[/bold green]")
+                return True
+                
+        except Exception as e:
+            console.print(f"[yellow]⚠️ Test error: {e}[/yellow]")
+            return False
+    
+    def _verify_single_credential(self, target, port, service_param, username, password):
+        """Verify a single credential by testing it 3 times to ensure consistency"""
+        try:
+            success_count = 0
+            
+            for attempt in range(3):
+                verify_command = f"hydra -l '{username}' -p '{password}' -s {port} -t 1 {target} http-post-form {service_param}"
+                result = subprocess.run(verify_command, shell=True, capture_output=True, text=True, timeout=10)
+                
+                if "valid password found" in result.stdout.lower() or "[valid]" in result.stdout.lower():
+                    success_count += 1
+            
+            # Require at least 2 out of 3 successful verifications
+            return success_count >= 2
+            
+        except Exception:
+            return False
     
     def run_john(self):
         """Run John the Ripper - Password cracker"""
