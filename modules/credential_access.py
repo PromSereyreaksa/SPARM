@@ -3,6 +3,8 @@
 import subprocess
 import sys
 import os
+import logging
+from datetime import datetime
 from core.utils import *
 from core.config import *
 
@@ -70,25 +72,88 @@ class CredentialAccessToolkit:
         auth_method = get_user_input("Choose method (1-4)", choices=["1", "2", "3", "4"])
         
         if auth_method in ["1", "2"]:
-            user_input = get_user_input("Username (single) or username list file path")
-            if os.path.isfile(user_input):
-                user_param = f"-L {user_input}"
+            console.print("\n[bold cyan]Username source:[/bold cyan]")
+            console.print("  1. Enter single username")
+            console.print("  2. Choose from SecLists usernames")
+            console.print("  3. Specify custom wordlist path")
+            
+            user_choice = get_user_input("Choose username source (1-3)", choices=["1", "2", "3"])
+            
+            if user_choice == "1":
+                username = get_user_input("Enter username")
+                user_param = f"-l {username}"
+            elif user_choice == "2":
+                user_wordlist = select_seclist_wordlist("usernames")
+                if user_wordlist:
+                    user_param = f"-L {user_wordlist}"
+                else:
+                    Warning("No usernames wordlist selected, falling back to manual entry")
+                    username = get_user_input("Enter username")
+                    user_param = f"-l {username}"
             else:
-                user_param = f"-l {user_input}"
+                user_input = get_user_input("Enter path to username wordlist")
+                if os.path.isfile(user_input):
+                    user_param = f"-L {user_input}"
+                else:
+                    Warning(f"File not found: {user_input}")
+                    username = get_user_input("Enter username")
+                    user_param = f"-l {username}"
         else:
             username = get_user_input("Enter username")
             user_param = f"-l {username}"
         
         if auth_method in ["1", "3"]:
-            pass_input = get_user_input("Password (single) or password list file path")
-            if os.path.isfile(pass_input):
-                pass_param = f"-P {pass_input}"
+            console.print("\n[bold cyan]Password source:[/bold cyan]")
+            console.print("  1. Enter single password")
+            console.print("  2. Choose from SecLists passwords")
+            console.print("  3. Specify custom wordlist path")
+            
+            pass_choice = get_user_input("Choose password source (1-3)", choices=["1", "2", "3"])
+            
+            if pass_choice == "1":
+                password = get_user_input("Enter password")
+                pass_param = f"-p {password}"
+            elif pass_choice == "2":
+                pass_wordlist = select_seclist_wordlist("passwords")
+                if pass_wordlist:
+                    pass_param = f"-P {pass_wordlist}"
+                else:
+                    Warning("No password wordlist selected, falling back to manual entry")
+                    password = get_user_input("Enter password")
+                    pass_param = f"-p {password}"
             else:
-                pass_param = f"-p {pass_input}"
+                pass_input = get_user_input("Enter path to password wordlist")
+                if os.path.isfile(pass_input):
+                    pass_param = f"-P {pass_input}"
+                else:
+                    Warning(f"File not found: {pass_input}")
+                    password = get_user_input("Enter password")
+                    pass_param = f"-p {password}"
         else:
             if auth_method == "2":
-                pass_file = get_user_input("Password list file path") or WORDLISTS.get("passwords", "/usr/share/wordlists/rockyou.txt")
-                pass_param = f"-P {pass_file}"
+                console.print("\n[bold cyan]Password source:[/bold cyan]")
+                console.print("  1. Choose from SecLists passwords")
+                console.print("  2. Specify custom wordlist path")
+                console.print("  3. Use default rockyou.txt")
+                
+                pass_choice = get_user_input("Choose password source (1-3)", choices=["1", "2", "3"])
+                
+                if pass_choice == "1":
+                    pass_wordlist = select_seclist_wordlist("passwords")
+                    if pass_wordlist:
+                        pass_param = f"-P {pass_wordlist}"
+                    else:
+                        Warning("No password wordlist selected, using default")
+                        pass_param = f"-P {WORDLISTS.get('passwords', ['/usr/share/wordlists/rockyou.txt'])[0]}"
+                elif pass_choice == "2":
+                    pass_file = get_user_input("Enter path to password wordlist")
+                    if os.path.isfile(pass_file):
+                        pass_param = f"-P {pass_file}"
+                    else:
+                        Warning(f"File not found: {pass_file}, using default")
+                        pass_param = f"-P {WORDLISTS.get('passwords', ['/usr/share/wordlists/rockyou.txt'])[0]}"
+                else:
+                    pass_param = f"-P {WORDLISTS.get('passwords', ['/usr/share/wordlists/rockyou.txt'])[0]}"
             else:
                 password = get_user_input("Enter password")
                 pass_param = f"-p {password}"
@@ -111,17 +176,75 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
+        
+        # Setup logging
+        log_file = setup_session_logging("hydra")
+        log_command_start(log_file, "hydra", command)
+        
         try:
-            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=1800)
-            if result.stdout:
-                console.print("\n[bold green]Results:[/bold green]")
-                console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
+            # Run with real-time output
+            process = subprocess.Popen(
+                command.split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
+                universal_newlines=True
+            )
+            
+            console.print("\n[bold green]Real-time Output:[/bold green]")
+            console.print("[dim]Press Ctrl+C to stop[/dim]\n")
+            
+            output_lines = []
+            
+            while True:
+                output = process.stdout.readline()
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    # Display real-time output
+                    safe_output = output.strip().replace('[', r'\[').replace(']', r'\]')
+                    console.print(safe_output)
+                    output_lines.append(output.strip())
+                    
+                    # Log to file
+                    log_output_line(log_file, output.strip())
+            
+            # Get remaining output
+            remaining_stdout, stderr = process.communicate()
+            if remaining_stdout:
+                for line in remaining_stdout.strip().split('\n'):
+                    if line:
+                        safe_line = line.replace('[', r'\[').replace(']', r'\]')
+                        console.print(safe_line)
+                        output_lines.append(line)
+                        log_output_line(log_file, line)
+            
+            if stderr:
+                Warning(f"Errors: {stderr}")
+                log_output_line(log_file, f"ERROR: {stderr}")
+            
+            log_command_end(log_file, "hydra", process.returncode)
+            
+            if output_lines:
+                Success(f"Command completed. Output logged to: {log_file}")
+            else:
+                Warning("No output received from command")
+                
+        except KeyboardInterrupt:
+            console.print("\n[bold yellow]Command interrupted by user[/bold yellow]")
+            try:
+                process.terminate()
+                process.wait(timeout=5)
+            except:
+                process.kill()
+            log_output_line(log_file, "Command interrupted by user")
         except subprocess.TimeoutExpired:
             Warning("Command timed out after 30 minutes")
+            log_output_line(log_file, "Command timed out")
         except Exception as e:
             Warning(f"Error executing command: {e}")
+            log_output_line(log_file, f"Error: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
@@ -192,17 +315,21 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
+        
+        # Setup logging
+        log_file = setup_session_logging("john")
+        log_command_start(log_file, "john", command)
+        
         try:
-            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
-            if result.stdout:
-                console.print("\n[bold green]Results:[/bold green]")
-                console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-        except subprocess.TimeoutExpired:
-            Warning("Command timed out after 1 hour")
+            # Use improved subprocess function with logging
+            success, stdout, stderr = safe_subprocess_run(command, timeout=3600, log_file=log_file)
+            if success:
+                Success(f"John completed successfully. Log saved to: {log_file}")
+            else:
+                Warning(f"John completed with errors. Check log: {log_file}")
         except Exception as e:
             Warning(f"Error executing command: {e}")
+            log_output_line(log_file, f"Error: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
@@ -268,17 +395,21 @@ class CredentialAccessToolkit:
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
         
         console.print(f"\n[bold green]Executing: {command}[/bold green]")
+        
+        # Setup logging
+        log_file = setup_session_logging("hashcat")
+        log_command_start(log_file, "hashcat", command)
+        
         try:
-            result = subprocess.run(command.split(), capture_output=True, text=True, timeout=3600)
-            if result.stdout:
-                console.print("\n[bold green]Results:[/bold green]")
-                console.print(result.stdout)
-                if result.stderr:
-                    Warning(f"Errors: {result.stderr}")
-        except subprocess.TimeoutExpired:
-            Warning("Command timed out after 1 hour")
+            # Use improved subprocess function with logging
+            success, stdout, stderr = safe_subprocess_run(command, timeout=3600, log_file=log_file)
+            if success:
+                Success(f"Hashcat completed successfully. Log saved to: {log_file}")
+            else:
+                Warning(f"Hashcat completed with errors. Check log: {log_file}")
         except Exception as e:
             Warning(f"Error executing command: {e}")
+            log_output_line(log_file, f"Error: {e}")
         
         show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
@@ -309,6 +440,8 @@ class CredentialAccessToolkit:
         elif choice == "4":
             return
         
+        # Preserve output and continue
+        preserve_output_on_exit()
         Continue()
 
 def run():

@@ -1,0 +1,27 @@
+[01:59:10] === SPARM QUICK TESTING STARTED ===
+[01:59:10] Testing DVWA connectivity...
+[01:59:10] ✅ DVWA connectivity successful
+[01:59:10] Testing Nmap scan...
+[01:59:10] ✅ Nmap scan successful
+[01:59:10] Nmap output: Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-31 01:59 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000055s latency).
+Other addresses for localhost (not scanned): ::1
+
+PORT     ST...
+[01:59:10] Checking tool availability...
+[01:59:10] ✅ nmap found at /usr/bin/nmap
+[01:59:10] ✅ nikto found at /usr/bin/nikto
+[01:59:10] ✅ sqlmap found at /usr/bin/sqlmap
+[01:59:10] ✅ hydra found at /usr/bin/hydra
+[01:59:10] ✅ gobuster found at /usr/bin/gobuster
+[01:59:10] ✅ dirb found at /usr/bin/dirb
+[01:59:10] Checking SecLists availability...
+[01:59:10] ✅ SecLists directory found
+[01:59:10] ✅ Found wordlist: Passwords/Common-Credentials/best1050.txt
+[01:59:10] ✅ Found wordlist: Usernames/top-usernames-shortlist.txt
+[01:59:10] Testing Python module imports...
+[01:59:10] ✅ Core utilities working
+[01:59:10] ✅ Configuration loaded - 4 wordlist categories
+[01:59:10] ✅ Configuration loaded - 10 tool paths
+[01:59:10] === SPARM QUICK TESTING COMPLETED ===

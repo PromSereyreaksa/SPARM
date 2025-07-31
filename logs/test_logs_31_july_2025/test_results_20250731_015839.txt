@@ -1,0 +1,9 @@
+[2025-07-31 01:58:39] === SPARM TOOL TESTING STARTED ===
+[2025-07-31 01:58:39] === STARTING COMPREHENSIVE SPARM TESTING ===
+[2025-07-31 01:58:39] 
+--- Running Test: DVWA Connectivity ---
+[2025-07-31 01:58:39] Testing connectivity to DVWA localhost:8080...
+[2025-07-31 01:58:39] ✅ DVWA connectivity successful
+[2025-07-31 01:58:39] 
+--- Running Test: Nmap Scanning ---
+[2025-07-31 01:58:39] Testing Nmap scan against localhost:8080...

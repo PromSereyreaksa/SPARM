@@ -1,0 +1,34 @@
+=== SPARM TOOL VERIFICATION ===
+Testing Nmap...
+Nmap return code: 0
+Nmap output: Starting Nmap 7.95 ( https://nmap.org ) at 2025-07-31 01:59 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000057s latency).
+Other addresses for localhost (not scanned): ::1
+
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 0.10 seconds
+...
+✅ Nmap test completed
+Testing Nikto...
+Nikto return code: 1
+Nikto output: - Nikto v2.5.0
+---------------------------------------------------------------------------
++ Target IP:          127.0.0.1
++ Target Hostname:    localhost
++ Target Port:        8080
++ Start Time:         2025-07-31 01:59:55 (GMT-4)
+--------------------------------------------------------------------...
+✅ Nikto test completed
+Testing basic HTTP connectivity...
+Curl return code: 0
+Curl headers: HTTP/1.1 302 Found
+Date: Thu, 31 Jul 2025 06:00:01 GMT
+Server: Apache/2.4.25 (Debian)
+Set-Cookie: PHPSESSID=9judrvt28ouruhacqrv2lojvp6; path=/
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-...
+✅ HTTP connectivity test completed
+=== TESTING COMPLETED ===

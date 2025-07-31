@@ -858,202 +858,373 @@ class SPARMInterface:
             Warning("XSSer not installed. Install with: sudo apt install xsser")
     
     def run_hydra(self):
-        """Run Hydra - Network login brute-forcer"""
+        """Enhanced Hydra - Network login brute-forcer with real-time output"""
         banner("Hydra - Network Login Brute-Forcer")
         
-        console.print("[bold cyan]Attack modes:[/bold cyan]")
-        console.print("1. Basic login (SSH/FTP/etc.)")
-        console.print("2. HTTP POST form attack")
-        console.print("3. HTTP GET form attack")
-        console.print("4. HTTP basic auth")
+        # Target specification with better examples
+        console.print("[bold cyan]Target Examples:[/bold cyan]")
+        console.print("  • Web server: localhost (port specified separately)")
+        console.print("  • SSH server: 10.0.0.1 or example.com") 
+        console.print("  • Remote host: 192.168.1.100")
+        console.print("  • Domain: example.com")
+        console.print("\n[bold yellow]💡 Note: Don't include port in target - specify it separately[/bold yellow]")
         
-        mode = get_user_input("Choose attack mode (1-4)", choices=["1", "2", "3", "4"]) or "1"
-        target = get_user_input("Enter target IP/domain")
+        target = get_user_input("Enter target IP/domain (without port)")
         
-        if mode == "1":
-            # Basic service attack
-            service = get_user_input("Enter service (ssh/ftp/telnet/etc.)")
-            
-            console.print("\n[bold cyan]Username options:[/bold cyan]")
-            console.print("1. Single username")
-            console.print("2. Username wordlist")
-            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "1"
-            
-            if user_choice == "1":
-                username = get_user_input("Enter username") or "admin"
-                user_param = f"-l {username}"
-            else:
-                username_file = select_wordlist("usernames", "Select username wordlist")
-                if not username_file:
-                    Warning("No username wordlist selected, using default 'admin'")
-                    user_param = "-l admin"
-                else:
-                    user_param = f"-L {username_file}"
-            
-            password_file = select_wordlist("passwords", "Select password wordlist")
-            if not password_file:
-                Warning("No password wordlist found!")
-                return
-            
-            command = f"hydra {user_param} -P {password_file} {target} {service}"
-                
-        elif mode == "2":
-            # HTTP POST form attack
-            console.print("\n[bold cyan]Username options:[/bold cyan]")
-            console.print("1. Single username")
-            console.print("2. Username wordlist")
-            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
-            
-            if user_choice == "1":
-                username = get_user_input("Enter username") or "admin"
-                user_param = f"-l {username}"
-            else:
-                username_file = select_wordlist("usernames", "Select username wordlist")
-                if not username_file:
-                    Warning("Username wordlist required for HTTP form attacks!")
-                    return
-                user_param = f"-L {username_file}"
-                
-            password_file = select_wordlist("passwords", "Select password wordlist")
-            if not password_file:
-                Warning("Password wordlist required!")
-                return
-                
-            login_path = get_user_input("Enter login path [default: /login.php]") or "/login.php"
-            
-            console.print("\n[bold cyan]Form field setup:[/bold cyan]")
-            console.print("1. Use common preset (user/pass)")
-            console.print("2. Use common preset (username/password)")  
-            console.print("3. Use common preset (email/password)")
-            console.print("4. Custom field names")
-            
-            field_choice = get_user_input("Choose option (1-4)", choices=["1", "2", "3", "4"]) or "1"
-            
-            if field_choice == "1":
-                form_data = "user=^USER^&pass=^PASS^"
-            elif field_choice == "2":
-                form_data = "username=^USER^&password=^PASS^"
-            elif field_choice == "3":
-                form_data = "email=^USER^&password=^PASS^"
-            else:
-                username_field = get_user_input("Enter username field name [default: user]") or "user"
-                password_field = get_user_input("Enter password field name [default: pass]") or "pass"
-                form_data = f"{username_field}=^USER^&{password_field}=^PASS^"
-            
-            console.print(f"[bold green]Generated form data:[/bold green] {form_data}")
-            fail_string = get_user_input("Enter failure string [default: Invalid credentials]") or "Invalid credentials"
-            
-            # Handle port in target for http-post-form
-            if ':' in target and not target.startswith('http'):
-                # Target has port (e.g., localhost:8080)
-                host, port = target.split(':', 1)
-                command = f'hydra {user_param} -P {password_file} -s {port} {host} http-post-form "{login_path}:{form_data}:{fail_string}"'
-            else:
-                command = f'hydra {user_param} -P {password_file} {target} http-post-form "{login_path}:{form_data}:{fail_string}"'
-            
-        elif mode == "3":
-            # HTTP GET form attack
-            console.print("\n[bold cyan]Username options:[/bold cyan]")
-            console.print("1. Single username")
-            console.print("2. Username wordlist")
-            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
-            
-            if user_choice == "1":
-                username = get_user_input("Enter username") or "admin"
-                user_param = f"-l {username}"
-            else:
-                username_file = select_wordlist("usernames", "Select username wordlist")
-                if not username_file:
-                    Warning("Username wordlist required for HTTP form attacks!")
-                    return
-                user_param = f"-L {username_file}"
-                
-            password_file = select_wordlist("passwords", "Select password wordlist")
-            if not password_file:
-                Warning("Password wordlist required!")
-                return
-                
-            console.print("\n[bold cyan]Form field setup:[/bold cyan]")
-            console.print("1. Use common preset (user/pass)")
-            console.print("2. Use common preset (username/password)")  
-            console.print("3. Use common preset (email/password)")
-            console.print("4. Custom field names")
-            
-            field_choice = get_user_input("Choose option (1-4)", choices=["1", "2", "3", "4"]) or "1"
-            
-            if field_choice == "1":
-                login_path = "/login?user=^USER^&pass=^PASS^"
-            elif field_choice == "2":
-                login_path = "/login?username=^USER^&password=^PASS^"
-            elif field_choice == "3":
-                login_path = "/login?email=^USER^&password=^PASS^"
-            else:
-                base_path = get_user_input("Enter base login path [default: /login]") or "/login"
-                username_field = get_user_input("Enter username field name [default: user]") or "user"
-                password_field = get_user_input("Enter password field name [default: pass]") or "pass"
-                login_path = f"{base_path}?{username_field}=^USER^&{password_field}=^PASS^"
-            
-            console.print(f"[bold green]Generated login URL:[/bold green] {login_path}")
-            fail_string = get_user_input("Enter failure string [default: Invalid credentials]") or "Invalid credentials"
-            
-            # Handle port in target for http-get-form
-            if ':' in target and not target.startswith('http'):
-                # Target has port (e.g., localhost:8080)
-                host, port = target.split(':', 1)
-                command = f'hydra {user_param} -P {password_file} {host} -s {port} http-get-form "{login_path}::{fail_string}"'
-            else:
-                command = f'hydra {user_param} -P {password_file} {target} http-get-form "{login_path}::{fail_string}"'
-            
-        elif mode == "4":
-            # HTTP basic auth
-            console.print("\n[bold cyan]Username options:[/bold cyan]")
-            console.print("1. Single username")
-            console.print("2. Username wordlist")
-            user_choice = get_user_input("Choose option (1-2)", choices=["1", "2"]) or "2"
-            
-            if user_choice == "1":
-                username = get_user_input("Enter username") or "admin"
-                user_param = f"-l {username}"
-            else:
-                username_file = select_wordlist("usernames", "Select username wordlist")
-                if not username_file:
-                    Warning("Username wordlist required for HTTP basic auth!")
-                    return
-                user_param = f"-L {username_file}"
-                
-            password_file = select_wordlist("passwords", "Select password wordlist")
-            if not password_file:
-                Warning("Password wordlist required!")
-                return
-                
-            path = get_user_input("Enter protected path [default: /]") or "/"
-            
-            # Handle port in target for http-get
-            if ':' in target and not target.startswith('http'):
-                # Target has port (e.g., localhost:8080)
-                host, port = target.split(':', 1)
-                command = f"hydra {user_param} -P {password_file} {host} -s {port} http-get {path}"
-            else:
-                command = f"hydra {user_param} -P {password_file} {target} http-get {path}"
+        # Service selection with better descriptions
+        console.print("\n[bold cyan]Available services:[/bold cyan]")
+        services = {
+            "1": "ssh", "2": "ftp", "3": "telnet", "4": "http-get", 
+            "5": "http-post-form", "6": "smb", "7": "rdp", "8": "mysql",
+            "9": "postgres", "10": "vnc"
+        }
         
-        # Add additional options
-        console.print("\n[bold cyan]Additional options:[/bold cyan]")
+        service_descriptions = {
+            "1": "SSH - Secure Shell login (port 22)",
+            "2": "FTP - File Transfer Protocol (port 21)", 
+            "3": "Telnet - Remote terminal (port 23)",
+            "4": "HTTP-GET - Basic HTTP authentication (port 80/443)",
+            "5": "HTTP-POST-FORM - Web login forms (port 80/443)",
+            "6": "SMB - Windows file sharing (port 445)",
+            "7": "RDP - Remote Desktop Protocol (port 3389)",
+            "8": "MySQL - Database server (port 3306)",
+            "9": "PostgreSQL - Database server (port 5432)",
+            "10": "VNC - Remote desktop (port 5900)"
+        }
+        
+        for key, service in services.items():
+            console.print(f"  {key}. {service_descriptions[key]}")
+        
+        service_choice = get_user_input("Choose service (1-10)", choices=[str(i) for i in range(1, 11)])
+        selected_service = services[service_choice]
+        
+        # Port specification
+        port_map = {
+            "1": "22", "2": "21", "3": "23", "4": "80", "5": "80",
+            "6": "445", "7": "3389", "8": "3306", "9": "5432", "10": "5900"
+        }
+        default_port = port_map.get(service_choice, "80")
+        
+        # Extract port from target if present
+        if ':' in target and not target.startswith('http'):
+            host, target_port = target.split(':', 1)
+            port = get_user_input(f"Enter port [default: {target_port}]") or target_port
+            target = host
+        else:
+            port = get_user_input(f"Enter port [default: {default_port}]") or default_port
+        
+        # Username configuration
+        console.print("\n[bold cyan]Username configuration:[/bold cyan]")
+        console.print("  1. Single username")
+        console.print("  2. Choose from wordlist directory")
+        console.print("  3. Specify custom wordlist path")
+        
+        user_choice = get_user_input("Choose username option (1-3)", choices=["1", "2", "3"])
+        
+        if user_choice == "1":
+            username = get_user_input("Enter username")
+            user_param = f"-l {username}"
+        elif user_choice == "2":
+            username_file = select_wordlist_from_directory("usernames", "Select username wordlist")
+            if username_file:
+                user_param = f"-L {username_file}"
+            else:
+                Warning("No username wordlist selected, using 'admin'")
+                user_param = "-l admin"
+        else:
+            user_input = get_user_input("Enter path to username wordlist")
+            if os.path.isfile(user_input):
+                user_param = f"-L {user_input}"
+            else:
+                Warning(f"File not found: {user_input}")
+                username = get_user_input("Enter username")
+                user_param = f"-l {username}"
+        
+        # Password configuration
+        console.print("\n[bold cyan]Password configuration:[/bold cyan]")
+        console.print("  1. Single password")
+        console.print("  2. Choose from wordlist directory")
+        console.print("  3. Specify custom wordlist path")
+        
+        pass_choice = get_user_input("Choose password option (1-3)", choices=["1", "2", "3"])
+        
+        if pass_choice == "1":
+            password = get_user_input("Enter password")
+            pass_param = f"-p {password}"
+        elif pass_choice == "2":
+            password_file = select_wordlist_from_directory("passwords", "Select password wordlist")
+            if password_file:
+                pass_param = f"-P {password_file}"
+            else:
+                Warning("No password wordlist selected")
+                return
+        else:
+            pass_input = get_user_input("Enter path to password wordlist")
+            if os.path.isfile(pass_input):
+                pass_param = f"-P {pass_input}"
+            else:
+                Warning(f"File not found: {pass_input}")
+                password = get_user_input("Enter password")
+                pass_param = f"-p {password}"
+        
+        # Thread configuration - moved before form setup
+        console.print("\n[bold cyan]🔧 Performance Settings:[/bold cyan]")
+        console.print("  • Low threads (1-4): Slower but less likely to trigger rate limiting")
+        console.print("  • Medium threads (8-16): Balanced performance")
+        console.print("  • High threads (32+): Faster but may cause false positives")
+        
         threads = get_user_input("Number of threads [default: 16]") or "16"
-        verbose = Confirm.ask("Enable verbose output?", default=False)
         
-        command += f" -t {threads}"
-        if verbose:
-            command += " -V"
+        # Special handling for HTTP POST forms with auto-detection
+        if selected_service == "http-post-form":
+            console.print("\n[bold cyan]📋 HTTP POST Form Configuration[/bold cyan]")
+            
+            # Enhanced login path handling
+            console.print("\n[bold yellow]Login Path Examples:[/bold yellow]")
+            console.print("  • /login.php (PHP login)")
+            console.print("  • /login (Simple path)")
+            console.print("  • /admin/login (Admin panel)")
+            console.print("  • /auth/signin (Authentication)")
+            
+            login_path = get_user_input("Enter login path (e.g., /login.php)")
+            
+            console.print("\n[bold cyan]Form field setup:[/bold cyan]")
+            console.print("  1. 📝 Auto-detect from target (recommended)")
+            console.print("  2. 👤 Common preset: user/pass")
+            console.print("  3. 🔑 Common preset: username/password")
+            console.print("  4. 📧 Common preset: email/password")
+            console.print("  5. ⚙️  Custom field names")
+            
+            field_choice = get_user_input("Choose option (1-5)", choices=["1", "2", "3", "4", "5"])
+            
+            if field_choice == "1":
+                console.print("[bold yellow]🔍 Auto-detecting form fields...[/bold yellow]")
+                console.print("💡 Tip: Visit the login page manually to see field names")
+                console.print("     Common field names are: username, password, user, pass, email")
+                
+                # Provide smart defaults for common scenarios
+                if "login.php" in login_path.lower():
+                    form_params = "username=^USER^&password=^PASS^"
+                    console.print(f"[bold green]✅ Detected PHP login - using:[/bold green] {form_params}")
+                else:
+                    form_params = "username=^USER^&password=^PASS^"
+                    console.print(f"[bold green]✅ Using standard fields:[/bold green] {form_params}")
+                    
+            elif field_choice == "2":
+                form_params = "user=^USER^&pass=^PASS^"
+            elif field_choice == "3":
+                form_params = "username=^USER^&password=^PASS^"
+            elif field_choice == "4":
+                form_params = "email=^USER^&password=^PASS^"
+            else:
+                console.print("\n[bold yellow]💡 Check the HTML source to find field names:[/bold yellow]")
+                console.print("   <input name=\"username\" type=\"text\">")
+                console.print("   <input name=\"password\" type=\"password\">")
+                username_field = get_user_input("Enter username field name")
+                password_field = get_user_input("Enter password field name")
+                form_params = f"{username_field}=^USER^&{password_field}=^PASS^"
+            
+            console.print(f"\n[bold green]📋 Generated form data:[/bold green] {form_params}")
+            
+            # Enhanced failure string detection
+            console.print("\n[bold yellow]Failure String Examples:[/bold yellow]")
+            console.print("  • 'Invalid credentials' or 'Invalid username'")
+            console.print("  • 'Login failed' or 'Authentication failed'")
+            console.print("  • 'Incorrect password' or 'Wrong password'")
+            console.print("  • 'Access denied' or 'Login error'")
+            
+            failure_string = get_user_input("Enter failure string (text that appears on failed login)")
+            
+            # Offer to test the failure string first
+            console.print(f"\n[bold yellow]🧪 Want to test your failure string first?[/bold yellow]")
+            if get_user_input("Test failure string with known bad credentials? [y/n]", choices=["y", "n"]) == "y":
+                test_user = get_user_input("Enter test username (e.g., 'baduser')")
+                test_pass = get_user_input("Enter test password (e.g., 'wrongpass')")
+                
+                test_command = f"hydra -l {test_user} -p {test_pass} -s {port} -V {target} http-post-form \"{login_path}:{form_params}:{failure_string}\""
+                console.print(f"\n[bold cyan]🔍 Test command:[/bold cyan] {test_command}")
+                console.print("[bold yellow]💡 This should show NO valid credentials if failure string is correct[/bold yellow]")
+                
+                if get_user_input("Run test? [y/n]", choices=["y", "n"]) == "y":
+                    console.print("\n[bold blue]Running test...[/bold blue]")
+                    try:
+                        result = subprocess.run(test_command, shell=True, capture_output=True, text=True, timeout=30)
+                        if "valid password found" in result.stdout.lower() or "[VALID]" in result.stdout:
+                            console.print("[bold red]⚠️  WARNING: Test found 'valid' credentials with known bad login![/bold red]")
+                            console.print("[bold yellow]Your failure string might be wrong. Check the exact error message.[/bold yellow]")
+                            
+                            if get_user_input("Continue anyway? [y/n]", choices=["y", "n"]) != "y":
+                                return
+                        else:
+                            console.print("[bold green]✅ Test passed - failure string looks correct[/bold green]")
+                    except Exception as e:
+                        console.print(f"[yellow]Test failed: {e}[/yellow]")
+            
+            service_param = f'"{login_path}:{form_params}:{failure_string}"'
+        else:
+            service_param = selected_service
+        
+        # Ask for verbose output first
+        verbose = get_user_input("Enable verbose output? [y/n] (y)", choices=["y", "n"]) or "y"
+        
+        # Build command as one continuous string (don't split into parts)
+        verbose_flag = "-V" if verbose.lower() == 'y' else ""
+        
+        if selected_service == "http-post-form":
+            command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {verbose_flag} {target} http-post-form {service_param}".strip()
+        else:
+            command = f"hydra {user_param} {pass_param} -s {port} -t {threads} {verbose_flag} {target} {service_param}".strip()
+        
+        # Clean up any double spaces
+        command = " ".join(command.split())
         
         console.print(f"\n[bold yellow]Command:[/bold yellow] {command}")
+        console.print("⚠ Hydra will attempt password brute-forcing. Use only on authorized targets.")
         
-        if check_tool_installed("hydra"):
-            Warning("Hydra will attempt password brute-forcing. Use only on authorized targets.")
-            if Confirm.ask("Continue?"):
-                success, stdout, stderr = safe_subprocess_run(command, timeout=600)
-                format_command_output(command, success, stdout, stderr)
-        else:
-            Warning("Hydra not installed. Install with: sudo apt install hydra")
+        if not get_user_input("Continue? [y/n]", choices=["y", "n"]) == "y":
+            console.print("Operation cancelled.")
+            return
+        
+        # Setup logging and run with enhanced real-time output and credential filtering
+        log_file = setup_session_logging("hydra")
+        
+        try:
+            console.print("\n[bold green]🚀 Starting Hydra attack...[/bold green]")
+            console.print("[dim]Press Ctrl+C to stop[/dim]\n")
+            
+            # Start process with shell=True to handle the complete command string
+            process = subprocess.Popen(
+                command,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
+                universal_newlines=True
+            )
+            
+            # Track credentials and statistics
+            valid_credentials = []
+            attempt_count = 0
+            error_count = 0
+            
+            while True:
+                output = process.stdout.readline()
+                if output == '' and process.poll() is not None:
+                    break
+                if output:
+                    line = output.strip()
+                    
+                    # Real-time credential success detection
+                    if "[VALID]" in line or "login:" in line.lower() and "password:" in line.lower():
+                        # Extract credentials from successful attempt
+                        if "login:" in line and "password:" in line:
+                            try:
+                                login_part = line.split("login:")[1].split("password:")[0].strip()
+                                password_part = line.split("password:")[1].strip()
+                                valid_credentials.append((login_part, password_part))
+                                console.print(f"[bold green]✅ FOUND VALID CREDENTIALS: {login_part}:{password_part}[/bold green]")
+                            except:
+                                console.print(f"[bold green]✅ SUCCESS: {line}[/bold green]")
+                                valid_credentials.append(("unknown", "unknown"))
+                    
+                    # Track attempts and errors
+                    elif "attempt" in line.lower() or "trying" in line.lower():
+                        attempt_count += 1
+                        if attempt_count % 50 == 0:  # Show progress every 50 attempts
+                            console.print(f"[dim]📊 Progress: {attempt_count} attempts made...[/dim]")
+                    
+                    elif "error" in line.lower() or "fail" in line.lower():
+                        error_count += 1
+                        if error_count < 5:  # Only show first few errors
+                            console.print(f"[yellow]⚠️  {line}[/yellow]")
+                    
+                    # Display other output (filtered)
+                    elif not line.startswith("[") and len(line) > 5:
+                        safe_output = line.replace('[', r'\[').replace(']', r'\]')
+                        console.print(safe_output)
+                    
+                    # Log everything
+                    with open(log_file, 'a') as f:
+                        f.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {line}\n")
+            
+            # Get remaining output
+            remaining_stdout, stderr = process.communicate()
+            if remaining_stdout:
+                for line in remaining_stdout.strip().split('\n'):
+                    if line and "[VALID]" in line:
+                        console.print(f"[bold green]✅ FINAL RESULT: {line}[/bold green]")
+            
+            # Show results summary
+            console.print("\n" + "="*60)
+            console.print("[bold cyan]🎯 ATTACK SUMMARY[/bold cyan]")
+            console.print("="*60)
+            
+            if valid_credentials:
+                console.print(f"[bold green]✅ Found {len(valid_credentials)} valid credential(s):[/bold green]")
+                for i, (user, pwd) in enumerate(valid_credentials, 1):
+                    console.print(f"  {i}. Username: [bold green]{user}[/bold green] | Password: [bold green]{pwd}[/bold green]")
+                
+                # Save valid credentials to file
+                creds_file = f"logs/hydra_valid_credentials_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+                with open(creds_file, 'w') as f:
+                    f.write(f"Hydra Valid Credentials - {datetime.now()}\n")
+                    f.write(f"Target: {target}\n")
+                    f.write(f"Service: {selected_service}\n")
+                    f.write("="*50 + "\n")
+                    for user, pwd in valid_credentials:
+                        f.write(f"{user}:{pwd}\n")
+                
+                Success(f"Valid credentials saved to: {creds_file}")
+                
+                # Offer to verify credentials
+                console.print("\n[bold yellow]🔍 CREDENTIAL VERIFICATION[/bold yellow]")
+                if get_user_input("Verify credentials manually? [y/n]", choices=["y", "n"]) == "y":
+                    for i, (user, pwd) in enumerate(valid_credentials, 1):
+                        console.print(f"\n[bold cyan]Testing credential {i}: {user}:{pwd}[/bold cyan]")
+                        
+                        # Single credential test
+                        verify_command = f"hydra -l {user} -p {pwd} -s {port} -V {target} http-post-form {service_param}"
+                        console.print(f"[dim]Command: {verify_command}[/dim]")
+                        
+                        try:
+                            result = subprocess.run(verify_command, shell=True, capture_output=True, text=True, timeout=15)
+                            
+                            if "valid password found" in result.stdout.lower() or "[VALID]" in result.stdout:
+                                console.print(f"[bold green]✅ VERIFIED: {user}:{pwd} is valid[/bold green]")
+                            else:
+                                console.print(f"[bold red]❌ FALSE POSITIVE: {user}:{pwd} failed verification[/bold red]")
+                                console.print("[yellow]This was likely a false positive from Hydra[/yellow]")
+                        except Exception as e:
+                            console.print(f"[yellow]Verification failed: {e}[/yellow]")
+                
+                # Suggest next steps for valid credentials
+                console.print("\n[bold yellow]🔄 NEXT STEPS:[/bold yellow]")
+                console.print("  • Test credentials manually in browser")
+                console.print("  • Check for password reuse on other services")
+                console.print("  • Document findings for reporting")
+                console.print("  • Consider if this was a false positive")
+                
+            else:
+                console.print("[bold red]❌ No valid credentials found[/bold red]")
+                console.print("[bold yellow]💡 Consider:[/bold yellow]")
+                console.print("  • Using different wordlists")
+                console.print("  • Checking if service is actually vulnerable")
+                console.print("  • Verifying target is accessible")
+            
+            console.print(f"\n📊 Total attempts: {attempt_count}")
+            console.print(f"📝 Complete log: {log_file}")
+            
+        except KeyboardInterrupt:
+            try:
+                process.terminate()
+                process.wait(timeout=5)
+            except:
+                process.kill()
+        except Exception as e:
+            Warning(f"Error running Hydra: {e}")
+        
+        show_next_steps("Credential Access", CATEGORIES["credential_access"]["next_steps"])
     
     def run_john(self):
         """Run John the Ripper - Password cracker"""

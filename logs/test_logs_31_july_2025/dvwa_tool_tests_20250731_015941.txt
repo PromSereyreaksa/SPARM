@@ -1,0 +1,5 @@
+[01:59:41] === DVWA TOOL TESTING STARTED ===
+[01:59:41] Target: localhost:8080 (DVWA)
+[01:59:41] Creating test wordlists for Hydra...
+[01:59:41] --- Testing Nmap Port Scan ---
+[01:59:41] Command: nmap -sV -p 8080 localhost
